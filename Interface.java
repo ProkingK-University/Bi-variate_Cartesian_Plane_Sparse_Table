@@ -80,10 +80,44 @@ public class Interface
 				else
 				{
 					tempNode = currPtr.up;
-					currPtr.up = newNode;
-					newNode.up = tempNode;
-					tempNode.down = newNode;
-					newNode.down = currPtr;
+
+					prevPtr = null;
+					currPtr = tempNode;
+
+					if (tempNode.getVariables()[1] == v2)
+					{
+						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
+						{
+							prevPtr = currPtr;
+							currPtr = currPtr.prevVal;
+						}
+
+						if (prevPtr == null)
+						{
+							newNode.up = tempNode.up;
+							newNode.down = tempNode.down;
+
+							tempNode.up = null;
+							tempNode.down = null;
+
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+						else
+						{
+							prevPtr.prevVal = newNode;
+							newNode.nextVal = prevPtr;
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+					}
+					else
+					{
+						currPtr.up = newNode;
+						newNode.up = tempNode;
+						tempNode.down = newNode;
+						newNode.down = currPtr;
+					}
 				}
 			}
 			else
@@ -114,10 +148,45 @@ public class Interface
 				else
 				{
 					tempNode = currPtr.down;
-					currPtr.down = newNode;
-					newNode.down = tempNode;
-					tempNode.up = newNode;
-					newNode.up = currPtr;
+
+					prevPtr = null;
+					currPtr = tempNode;
+
+					if (tempNode.getVariables()[1] == v2)
+					{
+						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
+						{
+							prevPtr = currPtr;
+							currPtr = currPtr.prevVal;
+						}
+
+						if (prevPtr == null)
+						{
+							newNode.up = tempNode.up;
+							newNode.down = tempNode.down;
+
+							tempNode.up = null;
+							tempNode.down = null;
+
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+						else
+						{
+							prevPtr.prevVal = newNode;
+							newNode.nextVal = prevPtr;
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+					}
+					else
+					{
+						currPtr.down = newNode;
+						newNode.down = tempNode;
+						tempNode.up = newNode;
+						newNode.up = currPtr;
+					}
+
 				}
 			}
 
@@ -149,10 +218,44 @@ public class Interface
 				else
 				{
 					tempNode = currPtr.right;
-					currPtr.right = newNode;
-					newNode.right = tempNode;
-					tempNode.left = newNode;
-					newNode.left = currPtr;
+
+					prevPtr = null;
+					currPtr = tempNode;
+
+					if (tempNode.getVariables()[0] == v1)
+					{
+						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
+						{
+							prevPtr = currPtr;
+							currPtr = currPtr.prevVal;
+						}
+
+						if (prevPtr == null)
+						{
+							newNode.right = tempNode.right;
+							newNode.left = tempNode.left;
+
+							tempNode.right = null;
+							tempNode.left = null;
+
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+						else
+						{
+							prevPtr.prevVal = newNode;
+							newNode.nextVal = prevPtr;
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+					}
+					else
+					{
+						currPtr.right = newNode;
+						newNode.right = tempNode;
+						tempNode.left = newNode;
+						newNode.left = currPtr;
+					}
 				}
 			}
 			else
@@ -182,14 +285,45 @@ public class Interface
 				}
 				else
 				{
-					currPtr.left = newNode;
-					newNode.right = currPtr;
-
 					tempNode = currPtr.left;
-					currPtr.left = newNode;
-					newNode.left = tempNode;
-					tempNode.right = newNode;
-					newNode.right = currPtr;
+
+					prevPtr = null;
+					currPtr = tempNode;
+
+					if (tempNode.getVariables()[0] == v1)
+					{
+						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
+						{
+							prevPtr = currPtr;
+							currPtr = currPtr.prevVal;
+						}
+
+						if (prevPtr == null)
+						{
+							newNode.left = tempNode.left;
+							newNode.right = tempNode.right;
+
+							tempNode.left = null;
+							tempNode.right = null;
+
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+						else
+						{
+							prevPtr.prevVal = newNode;
+							newNode.nextVal = prevPtr;
+							newNode.prevVal = currPtr;
+							currPtr.nextVal = newNode;
+						}
+					}
+					else
+					{
+						currPtr.left = newNode;
+						newNode.left = tempNode;
+						tempNode.right = newNode;
+						newNode.right = currPtr;
+					}
 				}
 			}
 
