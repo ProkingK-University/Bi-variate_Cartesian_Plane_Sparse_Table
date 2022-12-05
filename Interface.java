@@ -1,14 +1,14 @@
-//import java.text.DecimalFormat;
+import java.text.DecimalFormat;
 
 public class Interface
 {
 	private Node origin;
 
-	/*private String floatFormatter(float value)
+	private String floatFormatter(float value)
 	{
 		DecimalFormat df = new DecimalFormat("#.##");
 		return df.format(value);
-	}*/
+	}
 
 	public Interface()
 	{
@@ -46,6 +46,7 @@ public class Interface
 			boolean alreadyExists = false;
 
 			Node newAxis;
+			Node tempNode;
 			Node prevPtr = null;
 			Node currPtr = origin;
 			
@@ -78,8 +79,10 @@ public class Interface
 				}
 				else
 				{
-					//incorrect
+					tempNode = currPtr.up;
 					currPtr.up = newNode;
+					newNode.up = tempNode;
+					tempNode.down = newNode;
 					newNode.down = currPtr;
 				}
 			}
@@ -110,7 +113,10 @@ public class Interface
 				}
 				else
 				{
+					tempNode = currPtr.down;
 					currPtr.down = newNode;
+					newNode.down = tempNode;
+					tempNode.up = newNode;
 					newNode.up = currPtr;
 				}
 			}
@@ -142,7 +148,10 @@ public class Interface
 				}
 				else
 				{
+					tempNode = currPtr.right;
 					currPtr.right = newNode;
+					newNode.right = tempNode;
+					tempNode.left = newNode;
 					newNode.left = currPtr;
 				}
 			}
@@ -174,6 +183,12 @@ public class Interface
 				else
 				{
 					currPtr.left = newNode;
+					newNode.right = currPtr;
+
+					tempNode = currPtr.left;
+					currPtr.left = newNode;
+					newNode.left = tempNode;
+					tempNode.right = newNode;
 					newNode.right = currPtr;
 				}
 			}
