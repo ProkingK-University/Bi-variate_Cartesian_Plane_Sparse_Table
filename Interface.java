@@ -333,7 +333,113 @@ public class Interface
 
 	public Node removePoint(int v1, int v2)
 	{
-		return null;
+		if (v1 == 0 || v2 == 0)
+		{
+			return null;
+		}
+		else
+		{
+			Node prevPtrV1;
+			Node prevPtrV2;
+			
+			Node currPtrV1;
+			Node currPtrV2;
+
+			Node v1AxisPtr;
+			Node v2AxisPtr;
+
+			Node nodeToBeRemoved;
+
+			if (v1 > 0 && v2 > 0)
+			{
+				prevPtrV1 = null;
+				prevPtrV2 = null;
+
+				currPtrV1 = origin;
+				currPtrV2 = origin;
+				
+				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+				{
+					currPtrV1 = currPtrV1.right;
+				}
+
+				v1AxisPtr = currPtrV1;
+
+				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+				{
+					currPtrV2 = currPtrV2.up;
+				}
+
+				v2AxisPtr = currPtrV2;
+
+				if (currPtrV1 != null && currPtrV2 != null)
+				{
+					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+					{
+						prevPtrV1 = currPtrV1;
+						currPtrV1 = currPtrV1.up;
+					}
+
+					nodeToBeRemoved = currPtrV1;
+
+					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+					{
+						prevPtrV2 = currPtrV2;
+						currPtrV2 = currPtrV2.right;
+					}
+
+					if (currPtrV1.prevVal != null)
+					{
+						prevPtrV1.up = currPtrV1.prevVal;
+						currPtrV1.prevVal.down = prevPtrV1;
+						currPtrV1.nextVal = null;
+					}
+					else
+					{
+						prevPtrV1.up = currPtrV1.up;
+
+						if (currPtrV1.up != null)
+						{
+							currPtrV1.up.down = prevPtrV1;
+						}
+					}
+					
+					if (currPtrV2.prevVal != null)
+					{
+						prevPtrV2.right = currPtrV2.prevVal;
+						currPtrV2.prevVal.left = prevPtrV2;
+						currPtrV2.nextVal = null;
+					}
+					else
+					{
+						prevPtrV2.right = currPtrV2.right;
+
+						if (currPtrV2.right != null)
+						{
+							currPtrV2.right.left = prevPtrV2;
+						}
+					}
+
+					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
+					{
+						v1AxisPtr.left.right = v1AxisPtr.right;
+
+						if (v1AxisPtr.right != null)
+						{
+							v1AxisPtr.right.left = v1AxisPtr.left;
+						}
+					}
+
+					return nodeToBeRemoved;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			
+			return null; //placeholder
+		}
 	}
 
 	public Node getPoint(int v1, int v2)
@@ -395,6 +501,6 @@ public class Interface
 
 	public void clearAllData()
 	{
-
+		return;
 	}
 }
