@@ -1,14 +1,14 @@
-import java.text.DecimalFormat;
+//import java.text.DecimalFormat;
 
 public class Interface
 {
 	private Node origin;
 
-	private String floatFormatter(float value)
+	/*private String floatFormatter(float value)
 	{
 		DecimalFormat df = new DecimalFormat("#.##");
 		return df.format(value);
-	}
+	}*/
 
 	public Interface()
 	{
@@ -339,25 +339,19 @@ public class Interface
 		}
 		else
 		{
-			Node prevPtrV1;
-			Node prevPtrV2;
-			
-			Node currPtrV1;
-			Node currPtrV2;
-
 			Node v1AxisPtr;
 			Node v2AxisPtr;
 
 			Node nodeToBeRemoved;
 
+			Node prevPtrV1 = null;
+			Node prevPtrV2 = null;
+			
+			Node currPtrV1 = origin;
+			Node currPtrV2 = origin;
+
 			if (v1 > 0 && v2 > 0)
 			{
-				prevPtrV1 = null;
-				prevPtrV2 = null;
-
-				currPtrV1 = origin;
-				currPtrV2 = origin;
-				
 				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
 				{
 					currPtrV1 = currPtrV1.right;
@@ -430,6 +424,16 @@ public class Interface
 						}
 					}
 
+					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
+					{
+						v2AxisPtr.down.up = v2AxisPtr.up;
+
+						if (v2AxisPtr.up != null)
+						{
+							v2AxisPtr.up.down = v2AxisPtr.down;
+						}
+					}
+
 					return nodeToBeRemoved;
 				}
 				else
@@ -437,8 +441,279 @@ public class Interface
 					return null;
 				}
 			}
-			
-			return null; //placeholder
+			else if (v1 > 0 && v2 < 0)
+			{
+				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+				{
+					currPtrV1 = currPtrV1.right;
+				}
+
+				v1AxisPtr = currPtrV1;
+
+				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+				{
+					currPtrV2 = currPtrV2.down;
+				}
+
+				v2AxisPtr = currPtrV2;
+
+				if (currPtrV1 != null && currPtrV2 != null)
+				{
+					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+					{
+						prevPtrV1 = currPtrV1;
+						currPtrV1 = currPtrV1.down;
+					}
+
+					nodeToBeRemoved = currPtrV1;
+
+					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+					{
+						prevPtrV2 = currPtrV2;
+						currPtrV2 = currPtrV2.right;
+					}
+
+					if (currPtrV1.prevVal != null)
+					{
+						prevPtrV1.down = currPtrV1.prevVal;
+						currPtrV1.prevVal.up = prevPtrV1;
+						currPtrV1.nextVal = null;
+					}
+					else
+					{
+						prevPtrV1.down = currPtrV1.down;
+
+						if (currPtrV1.down != null)
+						{
+							currPtrV1.down.up = prevPtrV1;
+						}
+					}
+					
+					if (currPtrV2.prevVal != null)
+					{
+						prevPtrV2.right = currPtrV2.prevVal;
+						currPtrV2.prevVal.left = prevPtrV2;
+						currPtrV2.nextVal = null;
+					}
+					else
+					{
+						prevPtrV2.right = currPtrV2.right;
+
+						if (currPtrV2.right != null)
+						{
+							currPtrV2.right.left = prevPtrV2;
+						}
+					}
+
+					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
+					{
+						v1AxisPtr.left.right = v1AxisPtr.right;
+
+						if (v1AxisPtr.right != null)
+						{
+							v1AxisPtr.right.left = v1AxisPtr.left;
+						}
+					}
+
+					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
+					{
+						v2AxisPtr.up.down = v2AxisPtr.down;
+
+						if (v2AxisPtr.down != null)
+						{
+							v2AxisPtr.down.up = v2AxisPtr.up;
+						}
+					}
+
+					return nodeToBeRemoved;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			else if (v1 < 0 && v2 > 0)
+			{
+				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+				{
+					currPtrV1 = currPtrV1.left;
+				}
+
+				v1AxisPtr = currPtrV1;
+
+				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+				{
+					currPtrV2 = currPtrV2.up;
+				}
+
+				v2AxisPtr = currPtrV2;
+
+				if (currPtrV1 != null && currPtrV2 != null)
+				{
+					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+					{
+						prevPtrV1 = currPtrV1;
+						currPtrV1 = currPtrV1.up;
+					}
+
+					nodeToBeRemoved = currPtrV1;
+
+					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+					{
+						prevPtrV2 = currPtrV2;
+						currPtrV2 = currPtrV2.left;
+					}
+
+					if (currPtrV1.prevVal != null)
+					{
+						prevPtrV1.up = currPtrV1.prevVal;
+						currPtrV1.prevVal.down = prevPtrV1;
+						currPtrV1.nextVal = null;
+					}
+					else
+					{
+						prevPtrV1.up = currPtrV1.up;
+
+						if (currPtrV1.up != null)
+						{
+							currPtrV1.up.down = prevPtrV1;
+						}
+					}
+					
+					if (currPtrV2.prevVal != null)
+					{
+						prevPtrV2.left = currPtrV2.prevVal;
+						currPtrV2.prevVal.right = prevPtrV2;
+						currPtrV2.nextVal = null;
+					}
+					else
+					{
+						prevPtrV2.left = currPtrV2.left;
+
+						if (currPtrV2.left != null)
+						{
+							currPtrV2.left.right = prevPtrV2;
+						}
+					}
+
+					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
+					{
+						v1AxisPtr.right.left = v1AxisPtr.left;
+
+						if (v1AxisPtr.left != null)
+						{
+							v1AxisPtr.left.right = v1AxisPtr.right;
+						}
+					}
+
+					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
+					{
+						v2AxisPtr.down.up = v2AxisPtr.up;
+
+						if (v2AxisPtr.up != null)
+						{
+							v2AxisPtr.up.down = v2AxisPtr.down;
+						}
+					}
+
+					return nodeToBeRemoved;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			else
+			{
+				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+				{
+					currPtrV1 = currPtrV1.left;
+				}
+
+				v1AxisPtr = currPtrV1;
+
+				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+				{
+					currPtrV2 = currPtrV2.down;
+				}
+
+				v2AxisPtr = currPtrV2;
+
+				if (currPtrV1 != null && currPtrV2 != null)
+				{
+					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
+					{
+						prevPtrV1 = currPtrV1;
+						currPtrV1 = currPtrV1.down;
+					}
+
+					nodeToBeRemoved = currPtrV1;
+
+					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
+					{
+						prevPtrV2 = currPtrV2;
+						currPtrV2 = currPtrV2.left;
+					}
+
+					if (currPtrV1.prevVal != null)
+					{
+						prevPtrV1.down = currPtrV1.prevVal;
+						currPtrV1.prevVal.up = prevPtrV1;
+						currPtrV1.nextVal = null;
+					}
+					else
+					{
+						prevPtrV1.down = currPtrV1.down;
+
+						if (currPtrV1.down != null)
+						{
+							currPtrV1.down.up = prevPtrV1;
+						}
+					}
+					
+					if (currPtrV2.prevVal != null)
+					{
+						prevPtrV2.left = currPtrV2.prevVal;
+						currPtrV2.prevVal.right = prevPtrV2;
+						currPtrV2.nextVal = null;
+					}
+					else
+					{
+						prevPtrV2.left = currPtrV2.left;
+
+						if (currPtrV2.left != null)
+						{
+							currPtrV2.left.right = prevPtrV2;
+						}
+					}
+
+					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
+					{
+						v1AxisPtr.right.left = v1AxisPtr.left;
+
+						if (v1AxisPtr.left != null)
+						{
+							v1AxisPtr.left.right = v1AxisPtr.right;
+						}
+					}
+
+					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
+					{
+						v2AxisPtr.up.down = v2AxisPtr.down;
+
+						if (v2AxisPtr.down != null)
+						{
+							v2AxisPtr.down.up = v2AxisPtr.up;
+						}
+					}
+
+					return nodeToBeRemoved;
+				}
+				else
+				{
+					return null;
+				}
+			}
 		}
 	}
 
