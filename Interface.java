@@ -1,3 +1,6 @@
+import javax.lang.model.util.ElementScanner14;
+import javax.swing.text.Position;
+
 //import java.text.DecimalFormat;
 
 public class Interface
@@ -35,299 +38,475 @@ public class Interface
 		return origin;
 	}
 
+// ADDING PONIT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private Node insertAxis(Node node, String position)
+	{
+		boolean alreadyExists = false;
+
+		Node prevPtr = null;
+		Node currPtr = origin;
+
+		if (position.compareTo("right") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[0] < node.getVariables()[0])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.right;
+
+				if (currPtr != null && currPtr.getVariables()[0] == node.getVariables()[0])
+				{
+					alreadyExists = true;
+					break;
+				}
+			}
+
+			if (alreadyExists == false)
+			{
+				if (currPtr == null)
+				{
+					prevPtr.right = node;
+					node.left = prevPtr;
+				}
+				else
+				{
+					prevPtr.right = node;
+					node.left = prevPtr;
+					node.right = currPtr;
+					currPtr.left = node;
+				}
+			}
+			else
+			{
+				return currPtr;
+			}
+		}
+		else if (position.compareTo("left") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[0] > node.getVariables()[0])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.left;
+
+				if (currPtr != null && currPtr.getVariables()[0] == node.getVariables()[0])
+				{
+					alreadyExists = true;
+					break;
+				}
+			}
+
+			if (alreadyExists == false)
+			{
+				if (currPtr == null)
+				{
+					prevPtr.left = node;
+					node.right = prevPtr;
+				}
+				else
+				{
+					prevPtr.left = node;
+					node.right = prevPtr;
+					node.left = currPtr;
+					currPtr.right = node;
+				}
+			}
+			else
+			{
+				return currPtr;
+			}
+		}
+		else if (position.compareTo("up") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[1] < node.getVariables()[1])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.up;
+
+				if (currPtr != null && currPtr.getVariables()[1] == node.getVariables()[1])
+				{
+					alreadyExists = true;
+					break;
+				}
+			}
+
+			if (alreadyExists == false)
+			{
+				if (currPtr == null)
+				{
+					prevPtr.up = node;
+					node.down = prevPtr;
+				}
+				else
+				{
+					prevPtr.up = node;
+					node.down = prevPtr;
+					node.up = currPtr;
+					currPtr.down = node;
+				}
+			}
+			else
+			{
+				return currPtr;
+			}
+		}
+		else if (position.compareTo("down") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[1] > node.getVariables()[1])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.down;
+
+				if (currPtr != null && currPtr.getVariables()[1] == node.getVariables()[1])
+				{
+					alreadyExists = true;
+					break;
+				}
+			}
+
+			if (alreadyExists == false)
+			{
+				if (currPtr == null)
+				{
+					prevPtr.down = node;
+					node.up = prevPtr;
+				}
+				else
+				{
+					prevPtr.down = node;
+					node.up = prevPtr;
+					node.down = currPtr;
+					currPtr.up = node;
+				}
+			}
+			else
+			{
+				return currPtr;
+			}
+		}
+
+		return node;
+	}
+
+	private Node insertNode(Node node, Node axisNode, String position)
+	{
+		Node prevPtr = null;
+		Node currPtr = axisNode;
+
+		if (position.compareTo("right") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[0] < node.getVariables()[0])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.right;
+			}
+
+			if (currPtr == null)
+			{
+				prevPtr.right = node;
+				node.left = prevPtr;
+			}
+			else
+			{
+				prevPtr.right = node;
+				node.left = prevPtr;
+				node.right = currPtr;
+				currPtr.left = node;
+			}
+		}
+		else if (position.compareTo("left") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[0] > node.getVariables()[0])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.left;
+			}
+
+			if (currPtr == null)
+			{
+				prevPtr.left = node;
+				node.right = prevPtr;
+			}
+			else
+			{
+				prevPtr.left = node;
+				node.right = prevPtr;
+				node.left = currPtr;
+				currPtr.right = node;
+			}
+		}
+		else if (position.compareTo("up") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[1] < node.getVariables()[1])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.up;
+			}
+
+			if (currPtr == null)
+			{
+				prevPtr.up = node;
+				node.down = prevPtr;
+			}
+			else
+			{
+				prevPtr.up = node;
+				node.down = prevPtr;
+				node.up = currPtr;
+				currPtr.down = node;
+			}
+		}
+		else if (position.compareTo("down") == 0)
+		{
+			while (currPtr != null && currPtr.getVariables()[1] > node.getVariables()[1])
+			{
+				prevPtr = currPtr;
+				currPtr = currPtr.down;
+			}
+
+			if (currPtr == null)
+			{
+				prevPtr.down = node;
+				node.up = prevPtr;
+			}
+			else
+			{
+				prevPtr.down = node;
+				node.up = prevPtr;
+				node.down = currPtr;
+				currPtr.up = node;
+			}
+		}
+
+		return node;
+	}
+
+	private Node insertNodeLayer(Node head, Node node)
+	{
+		Node prevPtr = null;
+		Node currPtr = head;
+
+		while (currPtr != null && currPtr.getFunction().functionName.compareTo(node.getFunction().functionName) < 0)
+		{
+			prevPtr = currPtr;
+			currPtr = currPtr.prevVal;
+		}
+
+		if (currPtr == null)
+		{
+			prevPtr.prevVal = node;
+			node.nextVal = prevPtr;
+		}
+		else if (prevPtr == null)
+		{
+			node.right = head.right;
+			node.left = head.left;
+			node.up = head.up;
+			node.down = head.down;
+			node.prevVal = head;
+			head.nextVal = node;
+		}
+		else
+		{
+			prevPtr.prevVal = node;
+			node.nextVal = prevPtr;
+			node.prevVal = currPtr;
+			currPtr.nextVal = node;
+		}
+
+		return node;
+	}
+
 	public float addPoint(Function function, int v1, int v2)
 	{
+		Node newNode = null;
+		
 		if (v1 == 0 || v2 == 0)
 		{
 			return Float.NaN;
 		}
-		else
+		else if (getPoint(v1, v2) != null)
 		{
-			boolean alreadyExists = false;
+			newNode = new Node(function, v1, v2);
 
-			Node newAxis;
-			Node tempNode;
-			Node prevPtr = null;
-			Node currPtr = origin;
-			
-			Node newNode = new Node(function, v1, v2);
-
-			if (v1 > 0)
-			{
-				newAxis = new Node(new V1Axis(), v1, 0);
-
-				while (currPtr != null && currPtr.getValue() < v1)
-				{
-					if (currPtr.getVariables()[0] == v1)
-					{
-						alreadyExists = true;
-						break;
-					}
-
-					prevPtr = currPtr;
-					currPtr = currPtr.right;
-				}
-	
-				if (alreadyExists == false)
-				{
-					prevPtr.right = newAxis;
-					newAxis.right = currPtr;
-					newAxis.left = prevPtr;
-	
-					newAxis.up = newNode;
-					newNode.down = newAxis;
-				}
-				else
-				{
-					tempNode = currPtr.up;
-
-					prevPtr = null;
-					currPtr = tempNode;
-
-					if (tempNode.getVariables()[1] == v2)
-					{
-						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
-						{
-							prevPtr = currPtr;
-							currPtr = currPtr.prevVal;
-						}
-
-						if (prevPtr == null)
-						{
-							newNode.up = tempNode.up;
-							newNode.down = tempNode.down;
-
-							tempNode.up = null;
-							tempNode.down = null;
-
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-						else
-						{
-							prevPtr.prevVal = newNode;
-							newNode.nextVal = prevPtr;
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-					}
-					else
-					{
-						currPtr.up = newNode;
-						newNode.up = tempNode;
-						tempNode.down = newNode;
-						newNode.down = currPtr;
-					}
-				}
-			}
-			else
-			{
-				newAxis = new Node(new V1Axis(), v1, 0);
-
-				while (currPtr != null && currPtr.getValue() > v1)
-				{
-					if (currPtr.getVariables()[0] == v1)
-					{
-						alreadyExists = true;
-						break;
-					}
-					
-					prevPtr = currPtr;
-					currPtr = currPtr.left;
-				}
-
-				if (alreadyExists == false)
-				{
-					prevPtr.left = newAxis;
-					newAxis.left = currPtr;
-					newAxis.right = prevPtr;
-	
-					newAxis.down = newNode;
-					newNode.up = newAxis;
-				}
-				else
-				{
-					tempNode = currPtr.down;
-
-					prevPtr = null;
-					currPtr = tempNode;
-
-					if (tempNode.getVariables()[1] == v2)
-					{
-						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
-						{
-							prevPtr = currPtr;
-							currPtr = currPtr.prevVal;
-						}
-
-						if (prevPtr == null)
-						{
-							newNode.up = tempNode.up;
-							newNode.down = tempNode.down;
-
-							tempNode.up = null;
-							tempNode.down = null;
-
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-						else
-						{
-							prevPtr.prevVal = newNode;
-							newNode.nextVal = prevPtr;
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-					}
-					else
-					{
-						currPtr.down = newNode;
-						newNode.down = tempNode;
-						tempNode.up = newNode;
-						newNode.up = currPtr;
-					}
-
-				}
-			}
-
-			if (v2 > 0)
-			{
-				newAxis = new Node(new V2Axis(), 0, v2);
-
-				while (currPtr != null && currPtr.getValue() < v1)
-				{
-					if (currPtr.getVariables()[1] == v2)
-					{
-						alreadyExists = true;
-						break;
-					}
-					
-					prevPtr = currPtr;
-					currPtr = currPtr.up;
-				}
-	
-				if (alreadyExists == false)
-				{
-					prevPtr.up = newAxis;
-					newAxis.up = currPtr;
-					newAxis.down = prevPtr;
-	
-					newAxis.right = newNode;
-					newNode.left = newAxis;
-				}
-				else
-				{
-					tempNode = currPtr.right;
-
-					prevPtr = null;
-					currPtr = tempNode;
-
-					if (tempNode.getVariables()[0] == v1)
-					{
-						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
-						{
-							prevPtr = currPtr;
-							currPtr = currPtr.prevVal;
-						}
-
-						if (prevPtr == null)
-						{
-							newNode.right = tempNode.right;
-							newNode.left = tempNode.left;
-
-							tempNode.right = null;
-							tempNode.left = null;
-
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-						else
-						{
-							prevPtr.prevVal = newNode;
-							newNode.nextVal = prevPtr;
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-					}
-					else
-					{
-						currPtr.right = newNode;
-						newNode.right = tempNode;
-						tempNode.left = newNode;
-						newNode.left = currPtr;
-					}
-				}
-			}
-			else
-			{
-				newAxis = new Node(new V2Axis(), 0, v2);
-
-				while (currPtr != null && currPtr.getValue() > v2)
-				{
-					if (currPtr.getVariables()[1] == v2)
-					{
-						alreadyExists = true;
-						break;
-					}
-					
-					prevPtr = currPtr;
-					currPtr = currPtr.down;
-				}
-	
-				if (alreadyExists == false)
-				{
-					prevPtr.down = newAxis;
-					newAxis.down = currPtr;
-					newAxis.up = prevPtr;
-	
-					newAxis.left = newNode;
-					newNode.right = newAxis;
-				}
-				else
-				{
-					tempNode = currPtr.left;
-
-					prevPtr = null;
-					currPtr = tempNode;
-
-					if (tempNode.getVariables()[0] == v1)
-					{
-						while (currPtr != null && currPtr.getFunction().functionName.compareTo(function.functionName) < 0)
-						{
-							prevPtr = currPtr;
-							currPtr = currPtr.prevVal;
-						}
-
-						if (prevPtr == null)
-						{
-							newNode.left = tempNode.left;
-							newNode.right = tempNode.right;
-
-							tempNode.left = null;
-							tempNode.right = null;
-
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-						else
-						{
-							prevPtr.prevVal = newNode;
-							newNode.nextVal = prevPtr;
-							newNode.prevVal = currPtr;
-							currPtr.nextVal = newNode;
-						}
-					}
-					else
-					{
-						currPtr.left = newNode;
-						newNode.left = tempNode;
-						tempNode.right = newNode;
-						newNode.right = currPtr;
-					}
-				}
-			}
+			newNode = insertNodeLayer(getPoint(v1, v2), newNode);
 
 			return newNode.getValue();
+		}
+		else
+		{
+			String xAxis = "";
+			String yAxis = "";
+
+			newNode = new Node(function, v1, v2);
+
+			Node xAxisNode = new Node(new V1Axis(), v1, 0);
+			Node yAxisNode = new Node(new V2Axis(), 0, v2);
+
+			if (v1 > 0 && v2 > 0)
+			{
+				xAxis = "right";
+				yAxis = "up";
+			}
+			else if (v1 < 0 && v2 > 0)
+			{
+				xAxis = "left";
+				yAxis = "up";
+			}
+			else if (v1 > 0 && v2 < 0)
+			{
+				xAxis = "right";
+				yAxis = "down";
+			}
+			else
+			{
+				xAxis = "left";
+				yAxis = "down";
+			}
+
+			xAxisNode = insertAxis(xAxisNode, xAxis);
+			yAxisNode = insertAxis(yAxisNode, yAxis);
+
+			newNode = insertNode(newNode, xAxisNode, yAxis);
+			newNode = insertNode(newNode, yAxisNode, xAxis);
+
+			return newNode.getValue();
+		}
+	}
+
+// REMOVING POINT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private void deleteNode(Node node)
+	{
+		if (node.prevVal == null)
+		{
+			Node prev = node.left;
+			Node next = node.right;
+			Node top = node.up;
+			Node bottom = node.down;
+
+			if (prev != null)
+			{
+				prev.right = next;
+			}
+
+			if (next != null)
+			{
+				next.left = prev;
+			}
+
+			if (top != null)
+			{
+				bottom.up = top;
+			}
+
+			if (bottom != null)
+			{
+				top.down = bottom;
+			}
+		}
+		else
+		{
+			node.prevVal.right = node.right;
+			node.prevVal.left = node.left;
+			node.prevVal.up = node.up;
+			node.prevVal.down = node.down;
+
+			node.prevVal.nextVal = null;
+			node.prevVal = null;
+		}
+	}
+
+	private void deleteAxis(Node axis, String corner)
+	{
+		if (corner == "top right")
+		{
+			while (axis.getVariables()[0] != 0)
+			{
+				axis = axis.down;
+			}
+
+			if (axis.up == null && axis.down == null)
+			{
+				deleteNode(axis);
+			}
+
+			while (axis.getVariables()[1] != 0)
+			{
+				axis = axis.left;
+			}
+
+			if (axis.right == null && axis.left == null)
+			{
+				deleteNode(axis);
+			}
+		}
+		else if (corner == "bottom right")
+		{
+			while (axis.getVariables()[0] != 0)
+			{
+				axis = axis.up;
+			}
+
+			if (axis.up == null && axis.down == null)
+			{
+				deleteNode(axis);
+			}
+
+			while (axis.getVariables()[1] != 0)
+			{
+				axis = axis.left;
+			}
+
+			if (axis.right == null && axis.left == null)
+			{
+				deleteNode(axis);
+			}
+		}
+		else if (corner == "bottom left")
+		{
+			while (axis.getVariables()[0] != 0)
+			{
+				axis = axis.up;
+			}
+
+			if (axis.up == null && axis.down == null)
+			{
+				deleteNode(axis);
+			}
+
+			while (axis.getVariables()[1] != 0)
+			{
+				axis = axis.right;
+			}
+
+			if (axis.right == null && axis.left == null)
+			{
+				deleteNode(axis);
+			}
+		}
+		else if (corner == "top left")
+		{
+			while (axis.getVariables()[0] != 0)
+			{
+				axis = axis.down;
+			}
+
+			if (axis.up == null && axis.down == null)
+			{
+				deleteNode(axis);
+			}
+
+			while (axis.getVariables()[1] != 0)
+			{
+				axis = axis.right;
+			}
+
+			if (axis.right == null && axis.left == null)
+			{
+				deleteNode(axis);
+			}
 		}
 	}
 
@@ -339,383 +518,42 @@ public class Interface
 		}
 		else
 		{
-			Node v1AxisPtr;
-			Node v2AxisPtr;
+			String corner = "";
+			Node nodeToBeRemoved = getPoint(v1, v2);
 
-			Node nodeToBeRemoved;
-
-			Node prevPtrV1 = null;
-			Node prevPtrV2 = null;
-			
-			Node currPtrV1 = origin;
-			Node currPtrV2 = origin;
-
-			if (v1 > 0 && v2 > 0)
+			if (nodeToBeRemoved == null)
 			{
-				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-				{
-					currPtrV1 = currPtrV1.right;
-				}
-
-				v1AxisPtr = currPtrV1;
-
-				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-				{
-					currPtrV2 = currPtrV2.up;
-				}
-
-				v2AxisPtr = currPtrV2;
-
-				if (currPtrV1 != null && currPtrV2 != null)
-				{
-					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-					{
-						prevPtrV1 = currPtrV1;
-						currPtrV1 = currPtrV1.up;
-					}
-
-					nodeToBeRemoved = currPtrV1;
-
-					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-					{
-						prevPtrV2 = currPtrV2;
-						currPtrV2 = currPtrV2.right;
-					}
-
-					if (currPtrV1.prevVal != null)
-					{
-						prevPtrV1.up = currPtrV1.prevVal;
-						currPtrV1.prevVal.down = prevPtrV1;
-						currPtrV1.nextVal = null;
-					}
-					else
-					{
-						prevPtrV1.up = currPtrV1.up;
-
-						if (currPtrV1.up != null)
-						{
-							currPtrV1.up.down = prevPtrV1;
-						}
-					}
-					
-					if (currPtrV2.prevVal != null)
-					{
-						prevPtrV2.right = currPtrV2.prevVal;
-						currPtrV2.prevVal.left = prevPtrV2;
-						currPtrV2.nextVal = null;
-					}
-					else
-					{
-						prevPtrV2.right = currPtrV2.right;
-
-						if (currPtrV2.right != null)
-						{
-							currPtrV2.right.left = prevPtrV2;
-						}
-					}
-
-					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
-					{
-						v1AxisPtr.left.right = v1AxisPtr.right;
-
-						if (v1AxisPtr.right != null)
-						{
-							v1AxisPtr.right.left = v1AxisPtr.left;
-						}
-					}
-
-					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
-					{
-						v2AxisPtr.down.up = v2AxisPtr.up;
-
-						if (v2AxisPtr.up != null)
-						{
-							v2AxisPtr.up.down = v2AxisPtr.down;
-						}
-					}
-
-					return nodeToBeRemoved;
-				}
-				else
-				{
-					return null;
-				}
-			}
-			else if (v1 > 0 && v2 < 0)
-			{
-				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-				{
-					currPtrV1 = currPtrV1.right;
-				}
-
-				v1AxisPtr = currPtrV1;
-
-				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-				{
-					currPtrV2 = currPtrV2.down;
-				}
-
-				v2AxisPtr = currPtrV2;
-
-				if (currPtrV1 != null && currPtrV2 != null)
-				{
-					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-					{
-						prevPtrV1 = currPtrV1;
-						currPtrV1 = currPtrV1.down;
-					}
-
-					nodeToBeRemoved = currPtrV1;
-
-					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-					{
-						prevPtrV2 = currPtrV2;
-						currPtrV2 = currPtrV2.right;
-					}
-
-					if (currPtrV1.prevVal != null)
-					{
-						prevPtrV1.down = currPtrV1.prevVal;
-						currPtrV1.prevVal.up = prevPtrV1;
-						currPtrV1.nextVal = null;
-					}
-					else
-					{
-						prevPtrV1.down = currPtrV1.down;
-
-						if (currPtrV1.down != null)
-						{
-							currPtrV1.down.up = prevPtrV1;
-						}
-					}
-					
-					if (currPtrV2.prevVal != null)
-					{
-						prevPtrV2.right = currPtrV2.prevVal;
-						currPtrV2.prevVal.left = prevPtrV2;
-						currPtrV2.nextVal = null;
-					}
-					else
-					{
-						prevPtrV2.right = currPtrV2.right;
-
-						if (currPtrV2.right != null)
-						{
-							currPtrV2.right.left = prevPtrV2;
-						}
-					}
-
-					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
-					{
-						v1AxisPtr.left.right = v1AxisPtr.right;
-
-						if (v1AxisPtr.right != null)
-						{
-							v1AxisPtr.right.left = v1AxisPtr.left;
-						}
-					}
-
-					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
-					{
-						v2AxisPtr.up.down = v2AxisPtr.down;
-
-						if (v2AxisPtr.down != null)
-						{
-							v2AxisPtr.down.up = v2AxisPtr.up;
-						}
-					}
-
-					return nodeToBeRemoved;
-				}
-				else
-				{
-					return null;
-				}
-			}
-			else if (v1 < 0 && v2 > 0)
-			{
-				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-				{
-					currPtrV1 = currPtrV1.left;
-				}
-
-				v1AxisPtr = currPtrV1;
-
-				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-				{
-					currPtrV2 = currPtrV2.up;
-				}
-
-				v2AxisPtr = currPtrV2;
-
-				if (currPtrV1 != null && currPtrV2 != null)
-				{
-					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-					{
-						prevPtrV1 = currPtrV1;
-						currPtrV1 = currPtrV1.up;
-					}
-
-					nodeToBeRemoved = currPtrV1;
-
-					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-					{
-						prevPtrV2 = currPtrV2;
-						currPtrV2 = currPtrV2.left;
-					}
-
-					if (currPtrV1.prevVal != null)
-					{
-						prevPtrV1.up = currPtrV1.prevVal;
-						currPtrV1.prevVal.down = prevPtrV1;
-						currPtrV1.nextVal = null;
-					}
-					else
-					{
-						prevPtrV1.up = currPtrV1.up;
-
-						if (currPtrV1.up != null)
-						{
-							currPtrV1.up.down = prevPtrV1;
-						}
-					}
-					
-					if (currPtrV2.prevVal != null)
-					{
-						prevPtrV2.left = currPtrV2.prevVal;
-						currPtrV2.prevVal.right = prevPtrV2;
-						currPtrV2.nextVal = null;
-					}
-					else
-					{
-						prevPtrV2.left = currPtrV2.left;
-
-						if (currPtrV2.left != null)
-						{
-							currPtrV2.left.right = prevPtrV2;
-						}
-					}
-
-					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
-					{
-						v1AxisPtr.right.left = v1AxisPtr.left;
-
-						if (v1AxisPtr.left != null)
-						{
-							v1AxisPtr.left.right = v1AxisPtr.right;
-						}
-					}
-
-					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
-					{
-						v2AxisPtr.down.up = v2AxisPtr.up;
-
-						if (v2AxisPtr.up != null)
-						{
-							v2AxisPtr.up.down = v2AxisPtr.down;
-						}
-					}
-
-					return nodeToBeRemoved;
-				}
-				else
-				{
-					return null;
-				}
+				return null;
 			}
 			else
 			{
-				while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-				{
-					currPtrV1 = currPtrV1.left;
-				}
-
-				v1AxisPtr = currPtrV1;
-
-				while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-				{
-					currPtrV2 = currPtrV2.down;
-				}
-
-				v2AxisPtr = currPtrV2;
-
-				if (currPtrV1 != null && currPtrV2 != null)
-				{
-					while (currPtrV1 != null && currPtrV1.getVariables()[0] != v1)
-					{
-						prevPtrV1 = currPtrV1;
-						currPtrV1 = currPtrV1.down;
-					}
-
-					nodeToBeRemoved = currPtrV1;
-
-					while (currPtrV2 != null && currPtrV2.getVariables()[1] != v2)
-					{
-						prevPtrV2 = currPtrV2;
-						currPtrV2 = currPtrV2.left;
-					}
-
-					if (currPtrV1.prevVal != null)
-					{
-						prevPtrV1.down = currPtrV1.prevVal;
-						currPtrV1.prevVal.up = prevPtrV1;
-						currPtrV1.nextVal = null;
-					}
-					else
-					{
-						prevPtrV1.down = currPtrV1.down;
-
-						if (currPtrV1.down != null)
-						{
-							currPtrV1.down.up = prevPtrV1;
-						}
-					}
-					
-					if (currPtrV2.prevVal != null)
-					{
-						prevPtrV2.left = currPtrV2.prevVal;
-						currPtrV2.prevVal.right = prevPtrV2;
-						currPtrV2.nextVal = null;
-					}
-					else
-					{
-						prevPtrV2.left = currPtrV2.left;
-
-						if (currPtrV2.left != null)
-						{
-							currPtrV2.left.right = prevPtrV2;
-						}
-					}
-
-					if (v1AxisPtr.up == null || v1AxisPtr.down == null)
-					{
-						v1AxisPtr.right.left = v1AxisPtr.left;
-
-						if (v1AxisPtr.left != null)
-						{
-							v1AxisPtr.left.right = v1AxisPtr.right;
-						}
-					}
-
-					if (v2AxisPtr.right == null || v2AxisPtr.left == null)
-					{
-						v2AxisPtr.up.down = v2AxisPtr.down;
-
-						if (v2AxisPtr.down != null)
-						{
-							v2AxisPtr.down.up = v2AxisPtr.up;
-						}
-					}
-
-					return nodeToBeRemoved;
-				}
-				else
-				{
-					return null;
-				}
+				deleteNode(nodeToBeRemoved);
 			}
+			
+			if (v1 > 0 && v2 > 0)
+			{
+				corner = "top right";
+			}
+			else if (v1 < 0 && v2 > 0)
+			{
+				corner = "top left";
+			}
+			else if (v1 > 0 && v2 < 0)
+			{
+				corner = "bottom right";
+			}
+			else
+			{
+				corner = "bottom left";
+			}
+
+			deleteAxis(nodeToBeRemoved, corner);
+
+			return nodeToBeRemoved;
 		}
 	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public Node getPoint(int v1, int v2)
 	{

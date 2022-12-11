@@ -1,6 +1,69 @@
 public class Main {
     public static void main(String[] args)
     {
+        Interface cartesianPlane = new Interface();
+
+        cartesianPlane.addPoint(new AdditionFunction(), 2, 2);
+        cartesianPlane.addPoint(new AdditionFunction(), -2, -2);
+        cartesianPlane.addPoint(new AdditionFunction(), 1, 1);
+        cartesianPlane.addPoint(new AdditionFunction(), 2, 1);
+        cartesianPlane.addPoint(new AdditionFunction(), 1, 2);
+        //cartesianPlane.addPoint(new SubtractionFunction(), 2, 2);
+
+
+        Node center = cartesianPlane.getOrigin();
+
+        for (String s : center.getNodeLinks())
+        {
+            System.out.println(s);
+        }
+
+        Node currPtr = center;
+
+        /*while (currPtr != null)
+        {
+            System.out.println(currPtr.getValue());
+
+            currPtr = currPtr.right;
+        }*/
+
+        System.out.println();
+
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.right;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.up;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.left;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.down;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.up;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.up;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.right;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.down;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.left;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.right;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.down;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.right;
+        System.out.println(currPtr.getValue());
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         /*Interface interface1 = new Interface();
         for(int i=-1; i <= 1; i++)
         {
@@ -53,7 +116,80 @@ public class Main {
     }
 }
 
-class ExampleFunction1 extends Function{
+
+class AdditionFunction extends Function
+{
+    public AdditionFunction()
+    {
+        functionName = "Addition";
+    }
+
+    public float calculate(int v1, int v2)
+    {
+        return Math.abs(v1+v2);
+    }
+
+    public Function clone()
+    {
+        return new AdditionFunction();
+    }
+}
+
+class SubtractionFunction extends Function
+{
+    public SubtractionFunction()
+    {
+        functionName = "Subtraction";
+    }
+
+    public float calculate(int v1, int v2)
+    {
+        return Math.abs(v1-v2);
+    }
+
+    public Function clone()
+    {
+        return new SubtractionFunction();
+    }
+}
+
+class MultiplyFunction extends Function
+{
+    public MultiplyFunction()
+    {
+        functionName = "Multiply";
+    }
+
+    public float calculate(int v1, int v2)
+    {
+        return Math.abs(v1+v2);
+    }
+
+    public Function clone()
+    {
+        return new MultiplyFunction();
+    }
+}
+
+class PowerFunction extends Function
+{
+    public PowerFunction()
+    {
+        functionName = "Square";
+    }
+
+    public float calculate(int v1, int v2)
+    {
+        return Math.abs(v1 << v2);
+    }
+
+    public Function clone()
+    {
+        return new PowerFunction();
+    }
+}
+
+/*class ExampleFunction1 extends Function{
     public ExampleFunction1(){
         functionName = "Example function 1";
     }
@@ -79,7 +215,7 @@ class ExampleFunction2 extends Function{
     public Function clone(){
         return new ExampleFunction2();
     }
-}
+}*/
 
 /*
 Expected output:

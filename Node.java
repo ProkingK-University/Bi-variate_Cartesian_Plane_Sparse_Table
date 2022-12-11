@@ -78,7 +78,7 @@ public class Node {
 
 		if (up != null)
 		{
-			nodeLinks[0] = "U[" + up.v1 + "][" + up.v2 + "]{" + up.floatFormatter(up.getValue());
+			nodeLinks[0] = "U[" + up.v1 + "][" + up.v2 + "]{" + up.floatFormatter(up.getValue()) + "}";
 		}
 		else
 		{
@@ -87,7 +87,7 @@ public class Node {
 
 		if (down != null)
 		{
-			nodeLinks[1] = "D[" + down.v1 + "][" + down.v2 + "]{" + down.floatFormatter(down.getValue());
+			nodeLinks[1] = "D[" + down.v1 + "][" + down.v2 + "]{" + down.floatFormatter(down.getValue()) + "}";
 		}
 		else
 		{
@@ -96,7 +96,7 @@ public class Node {
 
 		if (right != null)
 		{
-			nodeLinks[2] = "R[" + right.v1 + "][" + right.v2 + "]{" + right.floatFormatter(right.getValue());
+			nodeLinks[2] = "R[" + right.v1 + "][" + right.v2 + "]{" + right.floatFormatter(right.getValue()) + "}";
 		}
 		else
 		{
@@ -105,7 +105,7 @@ public class Node {
 
 		if (left != null)
 		{
-			nodeLinks[3] = "L[" + left.v1 + "][" + left.v2 + "]{" + left.floatFormatter(left.getValue());
+			nodeLinks[3] = "L[" + left.v1 + "][" + left.v2 + "]{" + left.floatFormatter(left.getValue()) + "}";
 		}
 		else
 		{
@@ -114,7 +114,7 @@ public class Node {
 
 		if (prevVal != null)
 		{
-			nodeLinks[4] = "P[" + prevVal.v1 + "][" + prevVal.v2 + "]{" + prevVal.floatFormatter(prevVal.getValue());
+			nodeLinks[4] = "P[" + prevVal.v1 + "][" + prevVal.v2 + "]{" + prevVal.floatFormatter(prevVal.getValue()) + "}";
 		}
 		else
 		{
@@ -123,7 +123,7 @@ public class Node {
 
 		if (nextVal != null)
 		{
-			nodeLinks[5] = "N[" + nextVal.v1 + "][" + nextVal.v2 + "]{" + nextVal.floatFormatter(nextVal.getValue());
+			nodeLinks[5] = "N[" + nextVal.v1 + "][" + nextVal.v2 + "]{" + nextVal.floatFormatter(nextVal.getValue()) + "}";
 		}
 		else
 		{
@@ -132,5 +132,4 @@ public class Node {
 
 		return nodeLinks;
 	}
-
 }

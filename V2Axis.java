@@ -7,7 +7,7 @@ public class V2Axis extends Function
 
 	public float calculate(int v1, int v2)
     {
-        return v1;
+        return v2;
 	}
 
     public Function clone()
