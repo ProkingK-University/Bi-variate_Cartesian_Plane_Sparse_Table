@@ -1,5 +1,4 @@
 import javax.lang.model.util.ElementScanner14;
-import javax.swing.text.Position;
 
 //import java.text.DecimalFormat;
 
@@ -38,8 +37,8 @@ public class Interface
 		return origin;
 	}
 
-// ADDING PONIT
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// ADDING PONIT
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private Node insertAxis(Node node, String position)
 	{
@@ -374,8 +373,8 @@ public class Interface
 		}
 	}
 
-// REMOVING POINT
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// REMOVING POINT
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void deleteNode(Node node)
 	{
@@ -403,7 +402,7 @@ public class Interface
 
 			if (bottom != null)
 			{
-				top.down = bottom;
+				bottom.down = bottom;
 			}
 		}
 		else
@@ -422,7 +421,7 @@ public class Interface
 	{
 		if (corner == "top right")
 		{
-			while (axis.getVariables()[0] != 0)
+			while (axis != null && axis.getVariables()[1] != 0)
 			{
 				axis = axis.down;
 			}
@@ -432,7 +431,7 @@ public class Interface
 				deleteNode(axis);
 			}
 
-			while (axis.getVariables()[1] != 0)
+			while (axis != null && axis.getVariables()[0] != 0)
 			{
 				axis = axis.left;
 			}
@@ -444,7 +443,7 @@ public class Interface
 		}
 		else if (corner == "bottom right")
 		{
-			while (axis.getVariables()[0] != 0)
+			while (axis != null && axis.getVariables()[1] != 0)
 			{
 				axis = axis.up;
 			}
@@ -454,7 +453,7 @@ public class Interface
 				deleteNode(axis);
 			}
 
-			while (axis.getVariables()[1] != 0)
+			while (axis != null && axis.getVariables()[0] != 0)
 			{
 				axis = axis.left;
 			}
@@ -466,7 +465,7 @@ public class Interface
 		}
 		else if (corner == "bottom left")
 		{
-			while (axis.getVariables()[0] != 0)
+			while (axis != null && axis.getVariables()[1] != 0)
 			{
 				axis = axis.up;
 			}
@@ -476,7 +475,7 @@ public class Interface
 				deleteNode(axis);
 			}
 
-			while (axis.getVariables()[1] != 0)
+			while (axis != null && axis.getVariables()[0] != 0)
 			{
 				axis = axis.right;
 			}
@@ -488,7 +487,7 @@ public class Interface
 		}
 		else if (corner == "top left")
 		{
-			while (axis.getVariables()[0] != 0)
+			while (axis != null && axis.getVariables()[1] != 0)
 			{
 				axis = axis.down;
 			}
@@ -498,7 +497,7 @@ public class Interface
 				deleteNode(axis);
 			}
 
-			while (axis.getVariables()[1] != 0)
+			while (axis != null && axis.getVariables()[0] != 0)
 			{
 				axis = axis.right;
 			}
@@ -553,11 +552,158 @@ public class Interface
 		}
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private Node locateNode(Node node, int xAxis, int yAxis, String corner)
+	{
+		if (corner == "top right")
+		{
+			while (node != null && node.getVariables()[0] != xAxis)
+			{
+				node = node.right;
+			}
+
+			if (node == null)
+			{
+				return null;
+			}
+			else
+			{
+				while (node != null && node.getVariables()[1] != yAxis)
+				{
+					node = node.up;
+				}
+
+				if (node == null)
+				{
+					return null;
+				}
+				else
+				{
+					return node;
+				}
+			}
+		}
+		else if (corner == "bottom right")
+		{
+			while (node != null && node.getVariables()[0] != xAxis)
+			{
+				node = node.right;
+			}
+
+			if (node == null)
+			{
+				return null;
+			}
+			else
+			{
+				while (node != null && node.getVariables()[1] != yAxis)
+				{
+					node = node.down;
+				}
+
+				if (node == null)
+				{
+					return null;
+				}
+				else
+				{
+					return node;
+				}
+			}
+		}
+		else if (corner == "bottom left")
+		{
+			while (node != null && node.getVariables()[0] != xAxis)
+			{
+				node = node.left;
+			}
+
+			if (node == null)
+			{
+				return null;
+			}
+			else
+			{
+				while (node != null && node.getVariables()[1] != yAxis)
+				{
+					node = node.down;
+				}
+
+				if (node == null)
+				{
+					return null;
+				}
+				else
+				{
+					return node;
+				}
+			}
+		}
+		else if (corner == "top left")
+		{
+			while (node != null && node.getVariables()[0] != xAxis)
+			{
+				node = node.left;
+			}
+
+			if (node == null)
+			{
+				return null;
+			}
+			else
+			{
+				while (node != null && node.getVariables()[1] != yAxis)
+				{
+					node = node.up;
+				}
+
+				if (node == null)
+				{
+					return null;
+				}
+				else
+				{
+					return node;
+				}
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 	public Node getPoint(int v1, int v2)
 	{
-		return null;
+		if (v1 == 0 || v2 == 0)
+		{
+			return null;
+		}
+		else
+		{
+			String corner = "";
+			Node currPtr = origin;
+			
+			if (v1 > 0 && v2 > 0)
+			{
+				corner = "top right";
+			}
+			else if (v1 > 0 && v2 < 0)
+			{
+				corner = "bottom right";
+			}
+			else if (v1 < 0 && v2 < 0)
+			{
+				corner = "bottom left";
+			}
+			else
+			{
+				corner = "top left";
+			}
+
+			return locateNode(currPtr, v1, v2, corner);
+		}
 	}
 
 	public Node[] toArray()

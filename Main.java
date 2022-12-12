@@ -10,6 +10,16 @@ public class Main {
         cartesianPlane.addPoint(new AdditionFunction(), 1, 2);
         //cartesianPlane.addPoint(new SubtractionFunction(), 2, 2);
 
+        cartesianPlane.removePoint(1, 1);
+        System.out.println("Deleted");
+        cartesianPlane.removePoint(2, 2);
+        System.out.println("Deleted");
+        cartesianPlane.removePoint(-2, -2);
+        System.out.println("Deleted");
+        cartesianPlane.removePoint(1, 2);
+        System.out.println("Deleted");
+
+
 
         Node center = cartesianPlane.getOrigin();
 
@@ -36,6 +46,18 @@ public class Main {
         System.out.println(currPtr.getValue());
         currPtr = currPtr.left;
         System.out.println(currPtr.getValue());
+        currPtr = currPtr.up;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.right;
+        System.out.println(currPtr.getValue());
+
+        /*System.out.println(currPtr.getValue());
+        currPtr = currPtr.right;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.up;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.left;
+        System.out.println(currPtr.getValue());
         currPtr = currPtr.down;
         System.out.println(currPtr.getValue());
         currPtr = currPtr.up;
@@ -53,7 +75,7 @@ public class Main {
         currPtr = currPtr.down;
         System.out.println(currPtr.getValue());
         currPtr = currPtr.right;
-        System.out.println(currPtr.getValue());
+        System.out.println(currPtr.getValue());*/
         
         
         
