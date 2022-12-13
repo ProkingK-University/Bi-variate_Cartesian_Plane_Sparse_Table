@@ -8,7 +8,7 @@ public class Main {
         cartesianPlane.addPoint(new AdditionFunction(), 1, 1);
         cartesianPlane.addPoint(new AdditionFunction(), 2, 1);
         cartesianPlane.addPoint(new AdditionFunction(), 1, 2);
-        //cartesianPlane.addPoint(new SubtractionFunction(), 2, 2);
+        cartesianPlane.addPoint(new SubtractionFunction(), 2, 2);
 
         cartesianPlane.removePoint(1, 1);
         System.out.println("Deleted");
@@ -19,10 +19,11 @@ public class Main {
         cartesianPlane.removePoint(1, 2);
         System.out.println("Deleted");
 
-
+        cartesianPlane.addPoint(new PowerFunction(), 2, 1);
+        cartesianPlane.addPoint(new MultiplyFunction(), 2, 1);
 
         Node center = cartesianPlane.getOrigin();
-
+        
         for (String s : center.getNodeLinks())
         {
             System.out.println(s);
@@ -43,6 +44,14 @@ public class Main {
         currPtr = currPtr.right;
         System.out.println(currPtr.getValue());
         currPtr = currPtr.up;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.prevVal;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.prevVal;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.nextVal;
+        System.out.println(currPtr.getValue());
+        currPtr = currPtr.nextVal;
         System.out.println(currPtr.getValue());
         currPtr = currPtr.left;
         System.out.println(currPtr.getValue());

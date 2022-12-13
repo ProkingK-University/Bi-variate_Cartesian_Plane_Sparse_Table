@@ -397,12 +397,12 @@ public class Interface
 
 			if (top != null)
 			{
-				bottom.up = top;
+				top.down = bottom;
 			}
 
 			if (bottom != null)
 			{
-				bottom.down = bottom;
+				bottom.up = top;
 			}
 		}
 		else
