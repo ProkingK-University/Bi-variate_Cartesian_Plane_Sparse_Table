@@ -11,7 +11,7 @@ public class Main {
         cartesianPlane.addPoint(new SubtractionFunction(), 2, 2);
 
         cartesianPlane.removePoint(1, 1);
-        System.out.println("Deleted");
+        /*System.out.println("Deleted");
         cartesianPlane.removePoint(2, 2);
         System.out.println("Deleted");
         cartesianPlane.removePoint(-2, -2);
@@ -20,16 +20,32 @@ public class Main {
         System.out.println("Deleted");
 
         cartesianPlane.addPoint(new PowerFunction(), 2, 1);
-        cartesianPlane.addPoint(new MultiplyFunction(), 2, 1);
+        cartesianPlane.addPoint(new MultiplyFunction(), 2, 1);*/
 
-        Node center = cartesianPlane.getOrigin();
+        /*int[] array = cartesianPlane.numPointsPerQuadrant();
+
+        for (int i = 0; i < array.length; i++)
+        {
+            System.out.println(array[i]);
+        }
+
+        System.out.println(cartesianPlane.countNumberOfPoints());*/
+
+        Node[] array = cartesianPlane.toArray();
+
+        for (int i = 0; i < array.length; i++)
+        {
+            System.out.println(array[i].getValue());
+        }
+
+        /*Node center = cartesianPlane.getOrigin();
         
         for (String s : center.getNodeLinks())
         {
             System.out.println(s);
         }
 
-        Node currPtr = center;
+        Node currPtr = center;*/
 
         /*while (currPtr != null)
         {
@@ -38,9 +54,9 @@ public class Main {
             currPtr = currPtr.right;
         }*/
 
-        System.out.println();
+        //System.out.println();
 
-        System.out.println(currPtr.getValue());
+        /*System.out.println(currPtr.getValue());
         currPtr = currPtr.right;
         System.out.println(currPtr.getValue());
         currPtr = currPtr.up;
@@ -58,7 +74,7 @@ public class Main {
         currPtr = currPtr.up;
         System.out.println(currPtr.getValue());
         currPtr = currPtr.right;
-        System.out.println(currPtr.getValue());
+        System.out.println(currPtr.getValue());*/
 
         /*System.out.println(currPtr.getValue());
         currPtr = currPtr.right;

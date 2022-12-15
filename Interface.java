@@ -706,9 +706,208 @@ public class Interface
 		}
 	}
 
+	public int[] numPointsPerQuadrant()
+	{
+		int numOfNodes = 0;
+		int[] array = {0, 0, 0, 0};
+
+		Node horiCurrPtr = null;
+		Node depthCurrPtr = null;
+		Node vertCurrPtr = origin.up;
+
+		while (vertCurrPtr != null)
+		{
+			horiCurrPtr = vertCurrPtr.right;
+
+			while (horiCurrPtr != null)
+			{
+				if (horiCurrPtr.prevVal == null)
+				{
+					numOfNodes++;
+				}
+				else
+				{
+					depthCurrPtr = horiCurrPtr;
+					
+					while (depthCurrPtr != null)
+					{
+						numOfNodes++;
+						depthCurrPtr = depthCurrPtr.prevVal;
+					}
+				}
+
+				horiCurrPtr = horiCurrPtr.right;
+			}
+			
+			vertCurrPtr = vertCurrPtr.up;
+		}
+
+		array[0] = numOfNodes;
+		
+		numOfNodes = 0;
+
+		horiCurrPtr = null;
+		vertCurrPtr = origin.up;
+
+		while (vertCurrPtr != null)
+		{
+			horiCurrPtr = vertCurrPtr.left;
+
+			while (horiCurrPtr != null)
+			{
+				if (horiCurrPtr.prevVal == null)
+				{
+					numOfNodes++;
+				}
+				else
+				{
+					depthCurrPtr = horiCurrPtr;
+					
+					while (depthCurrPtr != null)
+					{
+						numOfNodes++;
+						depthCurrPtr = depthCurrPtr.prevVal;
+					}
+				}
+
+				horiCurrPtr = horiCurrPtr.left;
+			}
+			
+			vertCurrPtr = vertCurrPtr.up;
+		}
+
+		array[1] = numOfNodes;
+		
+		numOfNodes = 0;
+
+		horiCurrPtr = null;
+		vertCurrPtr = origin.down;
+
+		while (vertCurrPtr != null)
+		{
+			horiCurrPtr = vertCurrPtr.left;
+
+			while (horiCurrPtr != null)
+			{
+				if (horiCurrPtr.prevVal == null)
+				{
+					numOfNodes++;
+				}
+				else
+				{
+					depthCurrPtr = horiCurrPtr;
+					
+					while (depthCurrPtr != null)
+					{
+						numOfNodes++;
+						depthCurrPtr = depthCurrPtr.prevVal;
+					}
+				}
+
+				horiCurrPtr = horiCurrPtr.left;
+			}
+			
+			vertCurrPtr = vertCurrPtr.down;
+		}
+
+		array[2] = numOfNodes;
+		
+		numOfNodes = 0;
+
+		horiCurrPtr = null;
+		vertCurrPtr = origin.down;
+
+		while (vertCurrPtr != null)
+		{
+			horiCurrPtr = vertCurrPtr.right;
+
+			while (horiCurrPtr != null)
+			{
+				if (horiCurrPtr.prevVal == null)
+				{
+					numOfNodes++;
+				}
+				else
+				{
+					depthCurrPtr = horiCurrPtr;
+					
+					while (depthCurrPtr != null)
+					{
+						numOfNodes++;
+						depthCurrPtr = depthCurrPtr.prevVal;
+					}
+				}
+				
+				horiCurrPtr = horiCurrPtr.right;
+			}
+			
+			vertCurrPtr = vertCurrPtr.down;
+		}
+		
+		array[3] = numOfNodes;
+		
+		return array;
+	}
+
+	public int countNumberOfPoints()
+	{
+		int[] array = numPointsPerQuadrant();
+
+		int totalNumOfNodes = array[0] + array[1] + array[2] + array[3];
+
+		return totalNumOfNodes;
+	}
+
 	public Node[] toArray()
 	{
-		return null;
+		int index = 0;
+		Node[] arrayOfNodes = new Node[countNumberOfPoints()];
+
+		Node currVertPtr = null;
+		Node currDepthPtr = null;
+		Node currHorizPtr = origin;
+
+		while (currHorizPtr.right != null)
+		{
+			currHorizPtr = currHorizPtr.right;
+		}
+
+		while (currHorizPtr != null)
+		{
+			currVertPtr = currHorizPtr;
+
+			while (currVertPtr.up != null)
+			{
+				currVertPtr = currVertPtr.up;
+			}
+
+			while (currVertPtr != null)
+			{
+				if (currVertPtr.getVariables()[0] != 0 && currVertPtr.getVariables()[1] != 0)
+				{
+					if (currVertPtr.prevVal == null)
+					{
+						arrayOfNodes[index++] = currVertPtr;
+					}
+					else
+					{
+						currDepthPtr = currVertPtr;
+						
+						while (currDepthPtr != null)
+						{
+							arrayOfNodes[index++] = currDepthPtr;
+							currDepthPtr = currDepthPtr.prevVal;
+						}
+					}
+				}
+				
+				currVertPtr = currVertPtr.down;
+			}
+			
+			currHorizPtr = currHorizPtr.left;
+		}
+		
+		return arrayOfNodes;
 	}
 
 	public float calculateValue(Function function, int v1, int v2)
@@ -746,17 +945,7 @@ public class Interface
 		return 0;
 	}
 
-	public int countNumberOfPoints()
-	{
-		return 0;
-	}
 
-	public int[] numPointsPerQuadrant()
-	{
-		int[] array = {0};
-
-		return array;
-	}
 
 	public void clearAllData()
 	{
