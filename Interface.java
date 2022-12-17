@@ -1,5 +1,3 @@
-import javax.lang.model.util.ElementScanner14;
-
 //import java.text.DecimalFormat;
 
 public class Interface
@@ -42,8 +40,6 @@ public class Interface
 
 	private Node insertAxis(Node node, String position)
 	{
-		boolean alreadyExists = false;
-
 		Node prevPtr = null;
 		Node currPtr = origin;
 
@@ -56,29 +52,17 @@ public class Interface
 
 				if (currPtr != null && currPtr.getVariables()[0] == node.getVariables()[0])
 				{
-					alreadyExists = true;
-					break;
+					return currPtr;
 				}
 			}
 
-			if (alreadyExists == false)
+			prevPtr.right = node;
+			node.left = prevPtr;
+			node.right = currPtr;
+
+			if (currPtr != null)
 			{
-				if (currPtr == null)
-				{
-					prevPtr.right = node;
-					node.left = prevPtr;
-				}
-				else
-				{
-					prevPtr.right = node;
-					node.left = prevPtr;
-					node.right = currPtr;
-					currPtr.left = node;
-				}
-			}
-			else
-			{
-				return currPtr;
+				currPtr.left = node;
 			}
 		}
 		else if (position.compareTo("left") == 0)
@@ -90,29 +74,17 @@ public class Interface
 
 				if (currPtr != null && currPtr.getVariables()[0] == node.getVariables()[0])
 				{
-					alreadyExists = true;
-					break;
+					return currPtr;
 				}
 			}
 
-			if (alreadyExists == false)
+			prevPtr.left = node;
+			node.right = prevPtr;
+			node.left = currPtr;
+			
+			if (currPtr != null)
 			{
-				if (currPtr == null)
-				{
-					prevPtr.left = node;
-					node.right = prevPtr;
-				}
-				else
-				{
-					prevPtr.left = node;
-					node.right = prevPtr;
-					node.left = currPtr;
-					currPtr.right = node;
-				}
-			}
-			else
-			{
-				return currPtr;
+				currPtr.right = node;
 			}
 		}
 		else if (position.compareTo("up") == 0)
@@ -124,29 +96,17 @@ public class Interface
 
 				if (currPtr != null && currPtr.getVariables()[1] == node.getVariables()[1])
 				{
-					alreadyExists = true;
-					break;
+					return currPtr;
 				}
 			}
 
-			if (alreadyExists == false)
+			prevPtr.up = node;
+			node.down = prevPtr;
+			node.up = currPtr;
+
+			if (currPtr != null)
 			{
-				if (currPtr == null)
-				{
-					prevPtr.up = node;
-					node.down = prevPtr;
-				}
-				else
-				{
-					prevPtr.up = node;
-					node.down = prevPtr;
-					node.up = currPtr;
-					currPtr.down = node;
-				}
-			}
-			else
-			{
-				return currPtr;
+				currPtr.down = node;
 			}
 		}
 		else if (position.compareTo("down") == 0)
@@ -158,29 +118,17 @@ public class Interface
 
 				if (currPtr != null && currPtr.getVariables()[1] == node.getVariables()[1])
 				{
-					alreadyExists = true;
-					break;
+					return currPtr;
 				}
 			}
+			
+			prevPtr.down = node;
+			node.up = prevPtr;
+			node.down = currPtr;
 
-			if (alreadyExists == false)
+			if (currPtr != null)
 			{
-				if (currPtr == null)
-				{
-					prevPtr.down = node;
-					node.up = prevPtr;
-				}
-				else
-				{
-					prevPtr.down = node;
-					node.up = prevPtr;
-					node.down = currPtr;
-					currPtr.up = node;
-				}
-			}
-			else
-			{
-				return currPtr;
+				currPtr.up = node;
 			}
 		}
 
@@ -318,59 +266,32 @@ public class Interface
 
 	public float addPoint(Function function, int v1, int v2)
 	{
-		Node newNode = null;
-		
 		if (v1 == 0 || v2 == 0)
 		{
 			return Float.NaN;
 		}
-		else if (getPoint(v1, v2) != null)
+
+		String xAxis = v1 > 0 ? "right" : "left";
+		String yAxis = v2 > 0 ? "up" : "down";
+
+		Node newNode = new Node(function, v1, v2);
+		Node xAxisNode = new Node(new V1Axis(), v1, 0);
+		Node yAxisNode = new Node(new V2Axis(), 0, v2);
+
+		xAxisNode = insertAxis(xAxisNode, xAxis);
+		yAxisNode = insertAxis(yAxisNode, yAxis);
+
+		if (getPoint(v1, v2) != null)
 		{
-			newNode = new Node(function, v1, v2);
-
 			newNode = insertNodeLayer(getPoint(v1, v2), newNode);
-
-			return newNode.getValue();
 		}
 		else
 		{
-			String xAxis = "";
-			String yAxis = "";
-
-			newNode = new Node(function, v1, v2);
-
-			Node xAxisNode = new Node(new V1Axis(), v1, 0);
-			Node yAxisNode = new Node(new V2Axis(), 0, v2);
-
-			if (v1 > 0 && v2 > 0)
-			{
-				xAxis = "right";
-				yAxis = "up";
-			}
-			else if (v1 < 0 && v2 > 0)
-			{
-				xAxis = "left";
-				yAxis = "up";
-			}
-			else if (v1 > 0 && v2 < 0)
-			{
-				xAxis = "right";
-				yAxis = "down";
-			}
-			else
-			{
-				xAxis = "left";
-				yAxis = "down";
-			}
-
-			xAxisNode = insertAxis(xAxisNode, xAxis);
-			yAxisNode = insertAxis(yAxisNode, yAxis);
-
 			newNode = insertNode(newNode, xAxisNode, yAxis);
 			newNode = insertNode(newNode, yAxisNode, xAxis);
-
-			return newNode.getValue();
 		}
+
+		return newNode.getValue();
 	}
 
 	// REMOVING POINT
