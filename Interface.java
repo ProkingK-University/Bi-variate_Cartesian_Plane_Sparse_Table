@@ -499,19 +499,23 @@ public class Interface
 		}
 	}
 
-	public int[] numPointsPerQuadrant()
+	private int numNodesInQuadrant(String corner)
 	{
 		int numOfNodes = 0;
-		int[] array = {0, 0, 0, 0};
 
 		Node horiCurrPtr = null;
+		Node vertCurrPtr = null;
 		Node depthCurrPtr = null;
-		Node vertCurrPtr = origin.up;
+
+		boolean inTop = corner.equals("top right") || corner.equals("top left");
+		boolean inRight = corner.equals("top right") || corner.equals("bottom right");
+
+		vertCurrPtr = inTop ? origin.up : origin.down;
 
 		while (vertCurrPtr != null)
 		{
-			horiCurrPtr = vertCurrPtr.right;
-
+			horiCurrPtr = inRight ? vertCurrPtr.right : vertCurrPtr.left;
+			
 			while (horiCurrPtr != null)
 			{
 				if (horiCurrPtr.prevVal == null)
@@ -529,117 +533,25 @@ public class Interface
 					}
 				}
 
-				horiCurrPtr = horiCurrPtr.right;
+				horiCurrPtr = inRight ? horiCurrPtr.right : horiCurrPtr.left;
 			}
-			
-			vertCurrPtr = vertCurrPtr.up;
+
+			vertCurrPtr = inTop ? vertCurrPtr.up : vertCurrPtr.down;
 		}
 
-		array[0] = numOfNodes;
-		
-		numOfNodes = 0;
+		return numOfNodes;
+	}
 
-		horiCurrPtr = null;
-		vertCurrPtr = origin.up;
+	public int[] numPointsPerQuadrant()
+	{
+		int[] numOfNodesInQuadrantArray = new int[4];
 
-		while (vertCurrPtr != null)
-		{
-			horiCurrPtr = vertCurrPtr.left;
+		numOfNodesInQuadrantArray[0] = numNodesInQuadrant("top right");
+		numOfNodesInQuadrantArray[1] = numNodesInQuadrant("top left");
+		numOfNodesInQuadrantArray[2] = numNodesInQuadrant("bottom left");
+		numOfNodesInQuadrantArray[3] = numNodesInQuadrant("bottom right");
 
-			while (horiCurrPtr != null)
-			{
-				if (horiCurrPtr.prevVal == null)
-				{
-					numOfNodes++;
-				}
-				else
-				{
-					depthCurrPtr = horiCurrPtr;
-					
-					while (depthCurrPtr != null)
-					{
-						numOfNodes++;
-						depthCurrPtr = depthCurrPtr.prevVal;
-					}
-				}
-
-				horiCurrPtr = horiCurrPtr.left;
-			}
-			
-			vertCurrPtr = vertCurrPtr.up;
-		}
-
-		array[1] = numOfNodes;
-		
-		numOfNodes = 0;
-
-		horiCurrPtr = null;
-		vertCurrPtr = origin.down;
-
-		while (vertCurrPtr != null)
-		{
-			horiCurrPtr = vertCurrPtr.left;
-
-			while (horiCurrPtr != null)
-			{
-				if (horiCurrPtr.prevVal == null)
-				{
-					numOfNodes++;
-				}
-				else
-				{
-					depthCurrPtr = horiCurrPtr;
-					
-					while (depthCurrPtr != null)
-					{
-						numOfNodes++;
-						depthCurrPtr = depthCurrPtr.prevVal;
-					}
-				}
-
-				horiCurrPtr = horiCurrPtr.left;
-			}
-			
-			vertCurrPtr = vertCurrPtr.down;
-		}
-
-		array[2] = numOfNodes;
-		
-		numOfNodes = 0;
-
-		horiCurrPtr = null;
-		vertCurrPtr = origin.down;
-
-		while (vertCurrPtr != null)
-		{
-			horiCurrPtr = vertCurrPtr.right;
-
-			while (horiCurrPtr != null)
-			{
-				if (horiCurrPtr.prevVal == null)
-				{
-					numOfNodes++;
-				}
-				else
-				{
-					depthCurrPtr = horiCurrPtr;
-					
-					while (depthCurrPtr != null)
-					{
-						numOfNodes++;
-						depthCurrPtr = depthCurrPtr.prevVal;
-					}
-				}
-				
-				horiCurrPtr = horiCurrPtr.right;
-			}
-			
-			vertCurrPtr = vertCurrPtr.down;
-		}
-		
-		array[3] = numOfNodes;
-		
-		return array;
+		return numOfNodesInQuadrantArray;
 	}
 
 	public int countNumberOfPoints()
@@ -654,11 +566,10 @@ public class Interface
 	public Node[] toArray()
 	{
 		int index = 0;
-		Node[] arrayOfNodes = new Node[countNumberOfPoints()];
-
+		
 		Node currVertPtr = null;
-		Node currDepthPtr = null;
 		Node currHorizPtr = origin;
+		Node[] arrayOfNodes = new Node[countNumberOfPoints()];
 
 		while (currHorizPtr.right != null)
 		{
@@ -678,19 +589,12 @@ public class Interface
 			{
 				if (currVertPtr.getVariables()[0] != 0 && currVertPtr.getVariables()[1] != 0)
 				{
-					if (currVertPtr.prevVal == null)
+					Node currDepthPtr = currVertPtr;
+
+					while (currDepthPtr != null)
 					{
-						arrayOfNodes[index++] = currVertPtr;
-					}
-					else
-					{
-						currDepthPtr = currVertPtr;
-						
-						while (currDepthPtr != null)
-						{
-							arrayOfNodes[index++] = currDepthPtr;
-							currDepthPtr = currDepthPtr.prevVal;
-						}
+						arrayOfNodes[index++] = currDepthPtr;
+						currDepthPtr = currDepthPtr.prevVal;
 					}
 				}
 				
@@ -699,7 +603,7 @@ public class Interface
 			
 			currHorizPtr = currHorizPtr.left;
 		}
-		
+
 		return arrayOfNodes;
 	}
 

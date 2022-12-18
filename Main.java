@@ -33,6 +33,8 @@ public class Main {
 
         Node[] array = cartesianPlane.toArray();
 
+        System.out.println("length: " + array.length);
+
         for (int i = 0; i < array.length; i++)
         {
             System.out.println(array[i].getValue());
