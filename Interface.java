@@ -429,125 +429,49 @@ public class Interface
 		}
 	}
 
+	// UTILITY FUNCTIONS
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private Node locateNode(Node node, int xAxis, int yAxis, String corner)
 	{
-		if (corner == "top right")
+		while (node != null && node.getVariables()[0] != xAxis)
 		{
-			while (node != null && node.getVariables()[0] != xAxis)
+			if (corner.equals("top right") || corner.equals("bottom right"))
 			{
 				node = node.right;
 			}
-
-			if (node == null)
-			{
-				return null;
-			}
 			else
-			{
-				while (node != null && node.getVariables()[1] != yAxis)
-				{
-					node = node.up;
-				}
-
-				if (node == null)
-				{
-					return null;
-				}
-				else
-				{
-					return node;
-				}
-			}
-		}
-		else if (corner == "bottom right")
-		{
-			while (node != null && node.getVariables()[0] != xAxis)
-			{
-				node = node.right;
-			}
-
-			if (node == null)
-			{
-				return null;
-			}
-			else
-			{
-				while (node != null && node.getVariables()[1] != yAxis)
-				{
-					node = node.down;
-				}
-
-				if (node == null)
-				{
-					return null;
-				}
-				else
-				{
-					return node;
-				}
-			}
-		}
-		else if (corner == "bottom left")
-		{
-			while (node != null && node.getVariables()[0] != xAxis)
 			{
 				node = node.left;
 			}
-
-			if (node == null)
-			{
-				return null;
-			}
-			else
-			{
-				while (node != null && node.getVariables()[1] != yAxis)
-				{
-					node = node.down;
-				}
-
-				if (node == null)
-				{
-					return null;
-				}
-				else
-				{
-					return node;
-				}
-			}
 		}
-		else if (corner == "top left")
+
+		if (node == null)
 		{
-			while (node != null && node.getVariables()[0] != xAxis)
-			{
-				node = node.left;
-			}
-
-			if (node == null)
-			{
-				return null;
-			}
-			else
-			{
-				while (node != null && node.getVariables()[1] != yAxis)
-				{
-					node = node.up;
-				}
-
-				if (node == null)
-				{
-					return null;
-				}
-				else
-				{
-					return node;
-				}
-			}
+			return null;
 		}
 		else
 		{
-			return null;
+			while (node != null && node.getVariables()[1] != yAxis)
+			{
+				if (corner.equals("top right") || corner.equals("top left"))
+				{
+					node = node.up;
+				}
+				else
+				{
+					node = node.down;
+				}
+			}
+
+			if (node == null)
+			{
+				return null;
+			}
+			else
+			{
+				return node;
+			}
 		}
 	}
 
@@ -562,23 +486,15 @@ public class Interface
 			String corner = "";
 			Node currPtr = origin;
 			
-			if (v1 > 0 && v2 > 0)
+			if (v1 > 0)
 			{
-				corner = "top right";
-			}
-			else if (v1 > 0 && v2 < 0)
-			{
-				corner = "bottom right";
-			}
-			else if (v1 < 0 && v2 < 0)
-			{
-				corner = "bottom left";
+				corner = (v2 > 0) ? "top right" : "bottom right";
 			}
 			else
 			{
-				corner = "top left";
+				corner = (v2 > 0) ? "top left" : "bottom left";
 			}
-
+			
 			return locateNode(currPtr, v1, v2, corner);
 		}
 	}
