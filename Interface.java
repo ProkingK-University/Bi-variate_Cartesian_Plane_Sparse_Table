@@ -609,28 +609,143 @@ public class Interface
 
 	public float calculateValue(Function function, int v1, int v2)
 	{
-		return 0;
-	}
-
-	public float findMaxValue()
-	{
-		return 0;
+		if (function == null)
+		{
+			return Float.NaN;
+		}
+		else
+		{
+			return function.calculate(v1, v2);
+		}
 	}
 
 	public Node findMax()
 	{
-		return null;
+		Node[] nodesArray = toArray();
+
+		if (nodesArray.length == 0)
+		{
+			return null;
+		}
+		else
+		{
+			Node max = nodesArray[0];
+
+			for (int i = 0; i < nodesArray.length; i++)
+			{
+				if (max.getValue() < nodesArray[i].getValue())
+				{
+					max = nodesArray[i];
+				}
+				else if (max.getValue() == nodesArray[i].getValue())
+				{
+					if (max.getVariables()[0] > nodesArray[i].getVariables()[0])
+					{
+						max = nodesArray[i];
+					}
+					else if (max.getVariables()[0] == nodesArray[i].getVariables()[0])
+					{
+						if (max.getVariables()[1] < nodesArray[i].getVariables()[1])
+						{
+							max = nodesArray[i];
+						}
+						else if (max.getVariables()[1] == nodesArray[i].getVariables()[1])
+						{
+							Node currPtr = nodesArray[i];
+
+							while (currPtr.prevVal != null)
+							{
+								currPtr = currPtr.prevVal;
+							}
+							
+							max = currPtr;
+						}
+					}
+				}
+			}
+
+			return max;
+		}
 	}
+	
+	public Node findMin()
+	{
+		Node[] nodesArray = toArray();
+
+		if (nodesArray.length == 0)
+		{
+			return null;
+		}
+		else
+		{
+			Node min = nodesArray[0];
+
+			for (int i = 0; i < nodesArray.length; i++)
+			{
+				if (min.getValue() > nodesArray[i].getValue())
+				{
+					min = nodesArray[i];
+				}
+				else if (min.getValue() == nodesArray[i].getValue())
+				{
+					if (min.getVariables()[0] > nodesArray[i].getVariables()[0])
+					{
+						min = nodesArray[i];
+					}
+					else if (min.getVariables()[0] == nodesArray[i].getVariables()[0])
+					{
+						if (min.getVariables()[1] < nodesArray[i].getVariables()[1])
+						{
+							min = nodesArray[i];
+						}
+						else if (min.getVariables()[1] == nodesArray[i].getVariables()[1])
+						{
+							Node currPtr = nodesArray[i];
+
+							while (currPtr.prevVal != null)
+							{
+								currPtr = currPtr.prevVal;
+							}
+							
+							min = currPtr;
+						}
+					}
+				}
+			}
+
+			return min;
+		}
+	}
+
+	public float findMaxValue()
+	{
+		Node highestNode = findMax();
+
+		if (highestNode == null)
+		{
+			return Float.NaN;
+		}
+		else
+		{
+			return highestNode.getValue();
+		}
+	}
+
 
 	public float findMinValue()
 	{
-		return 0;
+		Node lowestNode = findMin();
+
+		if (lowestNode == null)
+		{
+			return Float.NaN;
+		}
+		else
+		{
+			return lowestNode.getValue();
+		}
 	}
 
-	public Node findMin()
-	{
-		return null;
-	}
 
 	public String printFunctionValues(String functionName)
 	{
@@ -641,8 +756,6 @@ public class Interface
 	{
 		return 0;
 	}
-
-
 
 	public void clearAllData()
 	{
