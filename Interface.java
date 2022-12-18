@@ -340,21 +340,21 @@ public class Interface
 
 	private void deleteAxis(Node axis, String corner)
 	{
-		if (corner == "top right")
+		if (corner == "top right" || corner == "bottom left")
 		{
 			while (axis != null && axis.getVariables()[1] != 0)
 			{
-				axis = axis.down;
+			  axis = (corner == "top right") ? axis.down : axis.up;
 			}
 
 			if (axis.up == null && axis.down == null)
 			{
 				deleteNode(axis);
 			}
-
+		  
 			while (axis != null && axis.getVariables()[0] != 0)
 			{
-				axis = axis.left;
+				axis = (corner == "top right") ? axis.left : axis.right;
 			}
 
 			if (axis.right == null && axis.left == null)
@@ -362,65 +362,21 @@ public class Interface
 				deleteNode(axis);
 			}
 		}
-		else if (corner == "bottom right")
+		else if (corner == "top left" || corner == "bottom right")
 		{
 			while (axis != null && axis.getVariables()[1] != 0)
 			{
-				axis = axis.up;
+				axis = (corner == "top left") ? axis.down : axis.up;
 			}
 
 			if (axis.up == null && axis.down == null)
 			{
 				deleteNode(axis);
 			}
-
+		
 			while (axis != null && axis.getVariables()[0] != 0)
 			{
-				axis = axis.left;
-			}
-
-			if (axis.right == null && axis.left == null)
-			{
-				deleteNode(axis);
-			}
-		}
-		else if (corner == "bottom left")
-		{
-			while (axis != null && axis.getVariables()[1] != 0)
-			{
-				axis = axis.up;
-			}
-
-			if (axis.up == null && axis.down == null)
-			{
-				deleteNode(axis);
-			}
-
-			while (axis != null && axis.getVariables()[0] != 0)
-			{
-				axis = axis.right;
-			}
-
-			if (axis.right == null && axis.left == null)
-			{
-				deleteNode(axis);
-			}
-		}
-		else if (corner == "top left")
-		{
-			while (axis != null && axis.getVariables()[1] != 0)
-			{
-				axis = axis.down;
-			}
-
-			if (axis.up == null && axis.down == null)
-			{
-				deleteNode(axis);
-			}
-
-			while (axis != null && axis.getVariables()[0] != 0)
-			{
-				axis = axis.right;
+				axis = (corner == "top left") ? axis.right : axis.left;
 			}
 
 			if (axis.right == null && axis.left == null)
