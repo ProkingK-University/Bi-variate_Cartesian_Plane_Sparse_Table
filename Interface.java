@@ -643,29 +643,32 @@ public class Interface
 		}
 		else
 		{
+			Node node = null;
 			Node max = nodesArray[0];
 
 			for (int i = 0; i < nodesArray.length; i++)
 			{
-				if (max.getValue() < nodesArray[i].getValue())
+				node = nodesArray[i];
+				
+				if (max.getValue() < node.getValue())
 				{
-					max = nodesArray[i];
+					max = node;
 				}
-				else if (max.getValue() == nodesArray[i].getValue())
+				else if (max.getValue() == node.getValue())
 				{
-					if (max.getVariables()[0] > nodesArray[i].getVariables()[0])
+					if (max.getVariables()[0] > node.getVariables()[0])
 					{
-						max = nodesArray[i];
+						max = node;
 					}
-					else if (max.getVariables()[0] == nodesArray[i].getVariables()[0])
+					else if (max.getVariables()[0] == node.getVariables()[0])
 					{
-						if (max.getVariables()[1] < nodesArray[i].getVariables()[1])
+						if (max.getVariables()[1] < node.getVariables()[1])
 						{
-							max = nodesArray[i];
+							max = node;
 						}
-						else if (max.getVariables()[1] == nodesArray[i].getVariables()[1])
+						else if (max.getVariables()[1] == node.getVariables()[1])
 						{
-							Node currPtr = nodesArray[i];
+							Node currPtr = node;
 
 							while (currPtr.prevVal != null)
 							{
@@ -692,29 +695,32 @@ public class Interface
 		}
 		else
 		{
+			Node node = null;
 			Node min = nodesArray[0];
 
 			for (int i = 0; i < nodesArray.length; i++)
 			{
-				if (min.getValue() > nodesArray[i].getValue())
+				node = nodesArray[i];
+				
+				if (min.getValue() > node.getValue())
 				{
-					min = nodesArray[i];
+					min = node;
 				}
-				else if (min.getValue() == nodesArray[i].getValue())
+				else if (min.getValue() == node.getValue())
 				{
-					if (min.getVariables()[0] > nodesArray[i].getVariables()[0])
+					if (min.getVariables()[0] > node.getVariables()[0])
 					{
-						min = nodesArray[i];
+						min = node;
 					}
-					else if (min.getVariables()[0] == nodesArray[i].getVariables()[0])
+					else if (min.getVariables()[0] == node.getVariables()[0])
 					{
-						if (min.getVariables()[1] < nodesArray[i].getVariables()[1])
+						if (min.getVariables()[1] < node.getVariables()[1])
 						{
-							min = nodesArray[i];
+							min = node;
 						}
-						else if (min.getVariables()[1] == nodesArray[i].getVariables()[1])
+						else if (min.getVariables()[1] == node.getVariables()[1])
 						{
-							Node currPtr = nodesArray[i];
+							Node currPtr = node;
 
 							while (currPtr.prevVal != null)
 							{
