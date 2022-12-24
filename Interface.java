@@ -1,14 +1,14 @@
-//import java.text.DecimalFormat;
+import java.text.DecimalFormat;
 
 public class Interface
 {
 	private Node origin;
 
-	/*private String floatFormatter(float value)
+	private String floatFormatter(float value)
 	{
 		DecimalFormat df = new DecimalFormat("#.##");
 		return df.format(value);
-	}*/
+	}
 
 	public Interface()
 	{
@@ -328,6 +328,11 @@ public class Interface
 		}
 		else
 		{
+			node.right.left = node.prevVal;
+			node.left.right = node.prevVal;
+			node.down.up = node.prevVal;
+			node.up.down = node.prevVal;
+			
 			node.prevVal.right = node.right;
 			node.prevVal.left = node.left;
 			node.prevVal.up = node.up;
@@ -749,16 +754,106 @@ public class Interface
 
 	public String printFunctionValues(String functionName)
 	{
-		return null;
+		String functionValues = "";
+
+		Node currVertPtr = null;
+		Node currHorizPtr = origin;
+
+		while (currHorizPtr.left != null)
+		{
+			currHorizPtr = currHorizPtr.left;
+		}
+
+		while (currHorizPtr != null)
+		{
+			currVertPtr = currHorizPtr;
+
+			while (currVertPtr.down != null)
+			{
+				currVertPtr = currVertPtr.down;
+			}
+
+			while (currVertPtr != null)
+			{
+				if (currVertPtr.getVariables()[0] != 0 && currVertPtr.getVariables()[1] != 0)
+				{
+					Node currDepthPtr = currVertPtr;
+
+					while (currDepthPtr != null)
+					{
+						if (currDepthPtr.getFunction().functionName.equals(functionName) == true)
+						{
+							functionValues += floatFormatter(currDepthPtr.getValue()) + ";";
+						}
+						
+						currDepthPtr = currDepthPtr.prevVal;
+					}
+				}
+				
+				currVertPtr = currVertPtr.up;
+			}
+			
+			currHorizPtr = currHorizPtr.right;
+		}
+
+		functionValues = functionValues.substring(0, functionValues.length()-1);
+
+		return functionValues;
 	}
 
 	public int removeAllFunctionPoints(String functionName)
 	{
-		return 0;
+		int numOfNodesRemoved = 0;
+
+		Node currVertPtr = null;
+		Node currHorizPtr = origin;
+
+		while (currHorizPtr.left != null)
+		{
+			currHorizPtr = currHorizPtr.left;
+		}
+
+		while (currHorizPtr != null)
+		{
+			currVertPtr = currHorizPtr;
+
+			while (currVertPtr.down != null)
+			{
+				currVertPtr = currVertPtr.down;
+			}
+
+			while (currVertPtr != null)
+			{
+				if (currVertPtr.getVariables()[0] != 0 && currVertPtr.getVariables()[1] != 0)
+				{
+					Node currDepthPtr = currVertPtr;
+
+					while (currDepthPtr != null)
+					{
+						if (currDepthPtr.getFunction().functionName.equals(functionName) == true)
+						{
+							removePoint(currDepthPtr.getVariables()[0], currDepthPtr.getVariables()[1]);
+							numOfNodesRemoved++;
+						}
+						
+						currDepthPtr = currDepthPtr.prevVal;
+					}
+				}
+				
+				currVertPtr = currVertPtr.up;
+			}
+			
+			currHorizPtr = currHorizPtr.right;
+		}
+
+		return numOfNodesRemoved;
 	}
 
 	public void clearAllData()
 	{
-		return;
+		origin.up = null;
+		origin.down = null;
+		origin.right = null;
+		origin.left = null;
 	}
 }

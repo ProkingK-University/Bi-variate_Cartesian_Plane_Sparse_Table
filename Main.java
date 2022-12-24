@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args)
     {
-        Interface cartesianPlane = new Interface();
+        /*Interface cartesianPlane = new Interface();
 
         cartesianPlane.addPoint(new AdditionFunction(), 2, 2);
         cartesianPlane.addPoint(new AdditionFunction(), -2, -2);
@@ -10,7 +10,7 @@ public class Main {
         cartesianPlane.addPoint(new AdditionFunction(), 1, 2);
         cartesianPlane.addPoint(new SubtractionFunction(), 2, 2);
 
-        cartesianPlane.removePoint(1, 1);
+        cartesianPlane.removePoint(1, 1);*/
         /*System.out.println("Deleted");
         cartesianPlane.removePoint(2, 2);
         System.out.println("Deleted");
@@ -22,6 +22,8 @@ public class Main {
         cartesianPlane.addPoint(new PowerFunction(), 2, 1);
         cartesianPlane.addPoint(new MultiplyFunction(), 2, 1);*/
 
+        //System.out.println(cartesianPlane.removeAllFunctionPoints("Addition"));
+
         /*int[] array = cartesianPlane.numPointsPerQuadrant();
 
         for (int i = 0; i < array.length; i++)
@@ -31,14 +33,14 @@ public class Main {
 
         System.out.println(cartesianPlane.countNumberOfPoints());*/
 
-        Node[] array = cartesianPlane.toArray();
+        /*Node[] array = cartesianPlane.toArray();
 
         System.out.println("length: " + array.length);
 
         for (int i = 0; i < array.length; i++)
         {
             System.out.println(array[i].getValue());
-        }
+        }*/
 
         /*Node center = cartesianPlane.getOrigin();
         
@@ -113,7 +115,7 @@ public class Main {
         
         
         
-        /*Interface interface1 = new Interface();
+        Interface interface1 = new Interface();
         for(int i=-1; i <= 1; i++)
         {
             for(int j=1; j >= -1; j--)
@@ -161,12 +163,12 @@ public class Main {
         else 
             System.out.println("Problem");
         System.out.println(n4.getFunction().getFunctionName());
-        System.out.println(n4.getValue() + " == " + interface1.calculateValue((new ExampleFunction2()), 1, 1));*/
+        System.out.println(n4.getValue() + " == " + interface1.calculateValue((new ExampleFunction2()), 1, 1));
     }
 }
 
 
-class AdditionFunction extends Function
+/*class AdditionFunction extends Function
 {
     public AdditionFunction()
     {
@@ -236,9 +238,9 @@ class PowerFunction extends Function
     {
         return new PowerFunction();
     }
-}
+}*/
 
-/*class ExampleFunction1 extends Function{
+class ExampleFunction1 extends Function{
     public ExampleFunction1(){
         functionName = "Example function 1";
     }
@@ -264,7 +266,7 @@ class ExampleFunction2 extends Function{
     public Function clone(){
         return new ExampleFunction2();
     }
-}*/
+}
 
 /*
 Expected output:
