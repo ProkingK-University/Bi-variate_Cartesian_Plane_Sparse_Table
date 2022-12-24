@@ -4,12 +4,6 @@ public class Interface
 {
 	private Node origin;
 
-	private String floatFormatter(float value)
-	{
-		DecimalFormat df = new DecimalFormat("#.##");
-		return df.format(value);
-	}
-
 	public Interface()
 	{
 		Origin originFunction = new Origin();
@@ -38,6 +32,36 @@ public class Interface
 	// ADDING PONIT
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	public float addPoint(Function function, int v1, int v2)
+	{
+		if (v1 == 0 || v2 == 0)
+		{
+			return Float.NaN;
+		}
+
+		String xAxis = v1 > 0 ? "right" : "left";
+		String yAxis = v2 > 0 ? "up" : "down";
+
+		Node newNode = new Node(function, v1, v2);
+		Node xAxisNode = new Node(new V1Axis(), v1, 0);
+		Node yAxisNode = new Node(new V2Axis(), 0, v2);
+
+		xAxisNode = insertAxis(xAxisNode, xAxis);
+		yAxisNode = insertAxis(yAxisNode, yAxis);
+
+		if (getPoint(v1, v2) != null)
+		{
+			newNode = insertNodeLayer(getPoint(v1, v2), newNode);
+		}
+		else
+		{
+			newNode = insertNode(newNode, xAxisNode, yAxis);
+			newNode = insertNode(newNode, yAxisNode, xAxis);
+		}
+
+		return newNode.getValue();
+	}
+	
 	private Node insertAxis(Node node, String position)
 	{
 		Node prevPtr = null;
@@ -264,39 +288,52 @@ public class Interface
 		return node;
 	}
 
-	public float addPoint(Function function, int v1, int v2)
-	{
-		if (v1 == 0 || v2 == 0)
-		{
-			return Float.NaN;
-		}
-
-		String xAxis = v1 > 0 ? "right" : "left";
-		String yAxis = v2 > 0 ? "up" : "down";
-
-		Node newNode = new Node(function, v1, v2);
-		Node xAxisNode = new Node(new V1Axis(), v1, 0);
-		Node yAxisNode = new Node(new V2Axis(), 0, v2);
-
-		xAxisNode = insertAxis(xAxisNode, xAxis);
-		yAxisNode = insertAxis(yAxisNode, yAxis);
-
-		if (getPoint(v1, v2) != null)
-		{
-			newNode = insertNodeLayer(getPoint(v1, v2), newNode);
-		}
-		else
-		{
-			newNode = insertNode(newNode, xAxisNode, yAxis);
-			newNode = insertNode(newNode, yAxisNode, xAxis);
-		}
-
-		return newNode.getValue();
-	}
-
 	// REMOVING POINT
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	public Node removePoint(int v1, int v2)
+	{
+		if (v1 == 0 || v2 == 0)
+		{
+			return null;
+		}
+		else
+		{
+			String corner = "";
+			Node nodeToBeRemoved = getPoint(v1, v2);
+
+			if (nodeToBeRemoved == null)
+			{
+				return null;
+			}
+			else
+			{
+				deleteNode(nodeToBeRemoved);
+			}
+			
+			if (v1 > 0 && v2 > 0)
+			{
+				corner = "top right";
+			}
+			else if (v1 < 0 && v2 > 0)
+			{
+				corner = "top left";
+			}
+			else if (v1 > 0 && v2 < 0)
+			{
+				corner = "bottom right";
+			}
+			else
+			{
+				corner = "bottom left";
+			}
+
+			deleteAxis(nodeToBeRemoved, corner);
+
+			return nodeToBeRemoved;
+		}
+	}
+	
 	private void deleteNode(Node node)
 	{
 		if (node.prevVal == null)
@@ -391,7 +428,10 @@ public class Interface
 		}
 	}
 
-	public Node removePoint(int v1, int v2)
+	// UTILITY FUNCTIONS
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public Node getPoint(int v1, int v2)
 	{
 		if (v1 == 0 || v2 == 0)
 		{
@@ -400,43 +440,21 @@ public class Interface
 		else
 		{
 			String corner = "";
-			Node nodeToBeRemoved = getPoint(v1, v2);
-
-			if (nodeToBeRemoved == null)
+			Node currPtr = origin;
+			
+			if (v1 > 0)
 			{
-				return null;
+				corner = (v2 > 0) ? "top right" : "bottom right";
 			}
 			else
 			{
-				deleteNode(nodeToBeRemoved);
+				corner = (v2 > 0) ? "top left" : "bottom left";
 			}
 			
-			if (v1 > 0 && v2 > 0)
-			{
-				corner = "top right";
-			}
-			else if (v1 < 0 && v2 > 0)
-			{
-				corner = "top left";
-			}
-			else if (v1 > 0 && v2 < 0)
-			{
-				corner = "bottom right";
-			}
-			else
-			{
-				corner = "bottom left";
-			}
-
-			deleteAxis(nodeToBeRemoved, corner);
-
-			return nodeToBeRemoved;
+			return locateNode(currPtr, v1, v2, corner);
 		}
 	}
-
-	// UTILITY FUNCTIONS
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	
 	private Node locateNode(Node node, int xAxis, int yAxis, String corner)
 	{
 		while (node != null && node.getVariables()[0] != xAxis)
@@ -480,30 +498,27 @@ public class Interface
 		}
 	}
 
-	public Node getPoint(int v1, int v2)
+	public int countNumberOfPoints()
 	{
-		if (v1 == 0 || v2 == 0)
-		{
-			return null;
-		}
-		else
-		{
-			String corner = "";
-			Node currPtr = origin;
-			
-			if (v1 > 0)
-			{
-				corner = (v2 > 0) ? "top right" : "bottom right";
-			}
-			else
-			{
-				corner = (v2 > 0) ? "top left" : "bottom left";
-			}
-			
-			return locateNode(currPtr, v1, v2, corner);
-		}
+		int[] array = numPointsPerQuadrant();
+
+		int totalNumOfNodes = array[0] + array[1] + array[2] + array[3];
+
+		return totalNumOfNodes;
 	}
 
+	public int[] numPointsPerQuadrant()
+	{
+		int[] numOfNodesInQuadrantArray = new int[4];
+
+		numOfNodesInQuadrantArray[0] = numNodesInQuadrant("top right");
+		numOfNodesInQuadrantArray[1] = numNodesInQuadrant("top left");
+		numOfNodesInQuadrantArray[2] = numNodesInQuadrant("bottom left");
+		numOfNodesInQuadrantArray[3] = numNodesInQuadrant("bottom right");
+
+		return numOfNodesInQuadrantArray;
+	}
+	
 	private int numNodesInQuadrant(String corner)
 	{
 		int numOfNodes = 0;
@@ -545,27 +560,6 @@ public class Interface
 		}
 
 		return numOfNodes;
-	}
-
-	public int[] numPointsPerQuadrant()
-	{
-		int[] numOfNodesInQuadrantArray = new int[4];
-
-		numOfNodesInQuadrantArray[0] = numNodesInQuadrant("top right");
-		numOfNodesInQuadrantArray[1] = numNodesInQuadrant("top left");
-		numOfNodesInQuadrantArray[2] = numNodesInQuadrant("bottom left");
-		numOfNodesInQuadrantArray[3] = numNodesInQuadrant("bottom right");
-
-		return numOfNodesInQuadrantArray;
-	}
-
-	public int countNumberOfPoints()
-	{
-		int[] array = numPointsPerQuadrant();
-
-		int totalNumOfNodes = array[0] + array[1] + array[2] + array[3];
-
-		return totalNumOfNodes;
 	}
 
 	public Node[] toArray()
@@ -799,6 +793,13 @@ public class Interface
 		functionValues = functionValues.substring(0, functionValues.length()-1);
 
 		return functionValues;
+	}
+
+	private String floatFormatter(float value)
+	{
+		DecimalFormat df = new DecimalFormat("#.##");
+
+		return df.format(value);
 	}
 
 	public int removeAllFunctionPoints(String functionName)

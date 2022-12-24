@@ -1,7 +1,7 @@
 import java.text.DecimalFormat;
 
-public class Node {
-
+public class Node
+{
 	private int v1;
 	private int v2;
 
