@@ -336,13 +336,13 @@ public class Interface
 	
 	private void deleteNode(Node node)
 	{
+		Node prev = node.left;
+		Node next = node.right;
+		Node top = node.up;
+		Node bottom = node.down;
+
 		if (node.prevVal == null)
 		{
-			Node prev = node.left;
-			Node next = node.right;
-			Node top = node.up;
-			Node bottom = node.down;
-
 			if (prev != null)
 			{
 				prev.right = next;
@@ -365,15 +365,30 @@ public class Interface
 		}
 		else
 		{
-			node.right.left = node.prevVal;
-			node.left.right = node.prevVal;
-			node.down.up = node.prevVal;
-			node.up.down = node.prevVal;
+			if (prev != null)
+			{
+				prev.right = node.prevVal;
+			}
+
+			if (next != null)
+			{
+				next.left = node.prevVal;
+			}
+
+			if (top != null)
+			{
+				top.down = node.prevVal;
+			}
+
+			if (bottom != null)
+			{
+				bottom.up = node.prevVal;
+			}
 			
-			node.prevVal.right = node.right;
-			node.prevVal.left = node.left;
-			node.prevVal.up = node.up;
-			node.prevVal.down = node.down;
+			node.prevVal.right = next;
+			node.prevVal.left = prev;
+			node.prevVal.up = top;
+			node.prevVal.down = bottom;
 
 			node.prevVal.nextVal = null;
 			node.prevVal = null;

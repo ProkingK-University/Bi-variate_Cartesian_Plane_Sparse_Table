@@ -94,6 +94,61 @@ public class Main {
         System.out.println("Node removed: " + "Value: " + node1.getValue() + " and Function: " + node1.getFunction().functionName);
         System.out.println("Node removed: " + "Value: " + node2.getValue() + " and Function: " + node2.getFunction().functionName);
         System.out.println("Node removed: " + "Value: " + node3.getValue() + " and Function: " + node3.getFunction().functionName);
+
+        Node[] arrayOfNodes = cartesianPlane.toArray();
+
+        for (int i = 0; i < arrayOfNodes.length; i++)
+        {
+            if (i != arrayOfNodes.length-1)
+            {
+                System.out.print(arrayOfNodes[i].getValue() + ";");
+            }
+            else
+            {
+                System.out.println(arrayOfNodes[i].getValue());
+            }
+        }
+
+        cartesianPlane = new Interface(arrayOfNodes);
+
+        System.out.println("Value: " + cartesianPlane.calculateValue(new PowerFunction(), 2, 3));
+
+        System.out.println("Max value: " + cartesianPlane.findMaxValue());
+        System.out.println("Min value: " + cartesianPlane.findMinValue());
+
+        int numOfRemovedNodes = cartesianPlane.removeAllFunctionPoints("Addition");
+
+        System.out.println(numOfRemovedNodes);
+        System.out.println(cartesianPlane.printFunctionValues("Subtraction"));
+
+        int[] numOfNodesPerQuadrant = cartesianPlane.numPointsPerQuadrant();
+
+        for (int i = 0; i < numOfNodesPerQuadrant.length; i++)
+        {
+            if (i != numOfNodesPerQuadrant.length-1)
+            {
+                System.out.print(numOfNodesPerQuadrant[i]+ " ");
+            }
+            else
+            {
+                System.out.println(numOfNodesPerQuadrant[i]);
+            }
+        }
+
+        cartesianPlane.clearAllData();
+
+        Node originNode = cartesianPlane.getOrigin();
+
+        if (originNode.up == null && originNode.down == null && originNode.right == null &&originNode.left == null)
+        {
+            System.out.println("Cleared");
+        }
+        else
+        {
+            System.out.println("Error");
+        }
+
+        System.out.println("\nCompleted");
     }
 }
 
@@ -162,7 +217,7 @@ class PowerFunction extends Function
 
     public float calculate(int v1, int v2)
     {
-        return v1 << v2;
+        return (float) Math.pow(v1, v2);
     }
 
     public Function clone()
@@ -170,3 +225,53 @@ class PowerFunction extends Function
         return new PowerFunction();
     }
 }
+
+// Expected output
+
+/*
+Testing Node Class: 
+
+Function type: Addition
+Coordinates: X = 1 and Y = 2
+Value: 3.0
+New function type: Multiply
+Node links: 
+U[][]{}
+D[][]{}
+R[][]{}
+L[][]{}
+P[][]{}
+N[][]{}
+New node links: 
+U[2][3]{5}
+D[][]{}
+R[][]{}
+L[3][1]{3}
+P[][]{}
+N[][]{}
+Testing Interface: 
+
+Number of nodes: 16
+Nodes with Addition function: 
+-3;-1;0;0;1;3
+Number of nodes: 20
+Nodes with Power function: 
+0,25;-1;1;4
+Node at x=1 and y=2: Value: 3.0 and Function: Addition
+Node at x=2 and y=2: Value: 4.0 and Function: Multiply
+Node at x=3 and y=1: Value: 1.0 and Function: Subtraction
+Number of nodes: 17
+Node removed: Value: -3.0 and Function: Addition
+Node removed: Value: 4.0 and Function: Multiply
+Node removed: Value: 1.0 and Function: Addition
+4.0;1.0;3.0;4.0;3.0;1.0;1.0;2.0;3.0;0.0;1.0;-1.0;1.0;0.0;-1.0;4.0;0.25
+Value: 8.0
+Max value: 4.0
+Min value: -1.0
+4
+1;3;2;4;3;1
+4 0 5 4
+Cleared
+
+Completed
+*/
